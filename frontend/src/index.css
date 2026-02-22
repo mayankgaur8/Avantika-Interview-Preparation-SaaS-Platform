@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    @apply bg-slate-950 text-white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-600 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-500;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-slate-900/60 backdrop-blur-sm border border-slate-700/50;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent;
+  }
+
+  .gradient-border {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+    padding: 1px;
+    border-radius: 12px;
+  }
+
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer;
+  }
+
+  .sidebar-item:hover {
+    @apply bg-slate-800 text-white;
+  }
+
+  .sidebar-item.active {
+    @apply bg-blue-600/20 text-blue-400 border border-blue-500/30;
+  }
+
+  .card-hover {
+    @apply transition-all duration-200 hover:border-slate-600 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-900/50;
+  }
+
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition-all duration-200 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-4 py-2 rounded-lg border border-slate-700 transition-all duration-200 active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply text-slate-400 hover:text-white hover:bg-slate-800 px-4 py-2 rounded-lg transition-all duration-200;
+  }
+
+  .input-base {
+    @apply w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors;
+  }
+
+  .difficulty-easy {
+    @apply text-green-400 bg-green-400/10 border-green-400/20;
+  }
+
+  .difficulty-medium {
+    @apply text-yellow-400 bg-yellow-400/10 border-yellow-400/20;
+  }
+
+  .difficulty-hard {
+    @apply text-red-400 bg-red-400/10 border-red-400/20;
+  }
+
+  .difficulty-expert {
+    @apply text-purple-400 bg-purple-400/10 border-purple-400/20;
+  }
+
+  .status-accepted {
+    @apply text-green-400 bg-green-400/10;
+  }
+
+  .status-wrong {
+    @apply text-red-400 bg-red-400/10;
+  }
+
+  .stat-card {
+    @apply bg-slate-900 border border-slate-800 rounded-xl p-4;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* CodeMirror customization */
+.cm-editor {
+  height: 100%;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 14px !important;
+}
+
+.cm-editor.cm-focused {
+  outline: none !important;
+}
+
+.cm-scroller {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* Activity heatmap */
+.heatmap-cell {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
