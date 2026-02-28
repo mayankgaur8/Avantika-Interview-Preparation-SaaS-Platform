@@ -118,7 +118,7 @@ const CodingPractice: React.FC = () => {
                   <span className="text-xs text-slate-600">{p.acceptance}%</span>
                 </div>
               </div>
-              {bookmarkedProblems.has(p.id) && <Bookmark size={11} className="text-yellow-400 mt-1 flex-shrink-0" />}
+              {bookmarkedProblems.includes(p.id) && <Bookmark size={11} className="text-yellow-400 mt-1 flex-shrink-0" />}
             </div>
           ))}
         </div>
@@ -142,10 +142,10 @@ const CodingPractice: React.FC = () => {
             ))}
             <div className="ml-auto flex items-center gap-1.5">
               <button onClick={() => toggleBookmark(selectedProblem.id)}
-                className={`p-1.5 rounded hover:bg-slate-800 transition-colors ${bookmarkedProblems.has(selectedProblem.id) ? 'text-yellow-400' : 'text-slate-400'}`}>
+                className={`p-1.5 rounded hover:bg-slate-800 transition-colors ${bookmarkedProblems.includes(selectedProblem.id) ? 'text-yellow-400' : 'text-slate-400'}`}>
                 <Bookmark size={14} />
               </button>
-              {solvedProblems.has(selectedProblem.id) && <CheckCircle2 size={14} className="text-green-400" />}
+              {solvedProblems.includes(selectedProblem.id) && <CheckCircle2 size={14} className="text-green-400" />}
             </div>
           </div>
 
