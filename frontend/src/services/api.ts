@@ -100,10 +100,17 @@ export const authApi = {
   login: async (email: string, password: string): Promise<AuthResponse> => {
     await delay();
     const accounts = getAccounts();
-    const account = accounts.find((a) => a.email.toLowerCase() === email.toLowerCase());
-    if (!account || account.passwordHash !== btoa(password)) {
-      throw new Error('Incorrect email or password. Please try again.');
+    let account = accounts.find((a) => a.email.toLowerCase() === email.toLowerCase());
+
+    if (!account) {
+      // Demo mode: auto-create account on first login with any credentials
+      const name = email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+      account = { id: `user_${Date.now()}`, name, email, passwordHash: btoa(password) };
+      saveAccounts([...accounts, account]);
+    } else if (account.passwordHash !== btoa(password)) {
+      throw new Error('Incorrect password. Please try again.');
     }
+
     const token = makeToken(account.id);
     return { token, user: { id: account.id, name: account.name, email: account.email }, subscription: mockSub() };
   },

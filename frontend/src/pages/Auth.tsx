@@ -129,7 +129,7 @@ export const Login: React.FC = () => {
             <Sparkles size={14} className="text-violet-400 mt-0.5 shrink-0" />
             <p className="text-slate-300">
               <span className="font-semibold text-violet-300">Demo: </span>
-              use any email + password to explore the platform.
+              enter any email &amp; password to instantly access the platform.
             </p>
           </div>
 
