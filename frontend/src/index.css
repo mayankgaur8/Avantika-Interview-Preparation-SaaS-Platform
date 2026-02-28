@@ -131,6 +131,48 @@
   font-family: 'JetBrains Mono', monospace !important;
 }
 
+/* ── Landing page animations ─────────────────────────────── */
+
+/* Dot-grid hero background */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(148,163,184,0.10) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Infinite horizontal marquee */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+
+/* Slow floating bob */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-10px) rotate(1deg); }
+}
+.float      { animation: float 5s ease-in-out infinite; }
+.float-slow { animation: float 7s ease-in-out infinite 1s; }
+
+/* Pulsing glow */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50%       { opacity: 0.6;  transform: scale(1.08); }
+}
+.glow-pulse { animation: glow-pulse 4s ease-in-out infinite; }
+
+/* Fade-up entry */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.6s ease-out both; }
+
 /* Activity heatmap */
 .heatmap-cell {
   width: 12px;
