@@ -18,7 +18,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const base = 'inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed select-none';
 
     const variants = {
-      primary: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20',
+      primary: 'bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white shadow-lg shadow-violet-600/20',
       secondary: 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700',
       ghost: 'text-slate-400 hover:text-white hover:bg-slate-800',
       danger: 'bg-red-600 hover:bg-red-700 text-white',
@@ -266,7 +266,7 @@ export const Avatar: React.FC<AvatarProps> = ({ initials, size = 'md', className
 
   return (
     <div className={clsx(
-      'rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center font-semibold text-white flex-shrink-0',
+      'rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center font-semibold text-white flex-shrink-0',
       sizes[size],
       className
     )}>

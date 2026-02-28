@@ -4,72 +4,82 @@ import {
   ArrowRight, CheckCircle2, Star, Zap, Code2, Brain,
   BarChart3, Award, Target, ChevronRight, Play,
   Sparkles, TrendingUp, Shield, Clock, Users, Linkedin,
+  Menu, X as XClose,
 } from 'lucide-react';
+import logo from '../assets/logo.png';
 
-// Inline SVGs for social icons (lucide Twitter/Github are deprecated)
+// Inline SVGs for deprecated lucide icons
 const XIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13">
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
   </svg>
 );
 const GithubIcon = () => (
   <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13">
-    <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+    <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
   </svg>
 );
-import logo from '../assets/logo.png';
 
-// ─── static data ──────────────────────────────────────────────────────────────
+// ─── Static data ───────────────────────────────────────────────────────────────
 
-const features = [
-  { icon: Brain,    title: 'AI Interview Coach',   desc: 'Claude-powered mock interviewer. Real-world questions, real-time feedback on depth, tone, and accuracy.',       gradient: 'from-blue-600 to-cyan-500',     glow: 'hover:shadow-blue-500/20' },
-  { icon: Code2,    title: 'Coding Playground',    desc: '5,000+ problems, multi-language editor, test cases, and AI code review — all in one tab.',                     gradient: 'from-emerald-600 to-teal-500',  glow: 'hover:shadow-emerald-500/20' },
-  { icon: Zap,      title: 'Skill Gap Analyzer',   desc: 'AI maps your weak areas to your target role. Tells you exactly what to study next, every day.',                gradient: 'from-yellow-500 to-orange-500', glow: 'hover:shadow-yellow-500/20' },
-  { icon: BarChart3,title: 'Progress Analytics',   desc: 'Streaks, skill radars, accuracy trends, and weekly score cards — data that keeps you motivated.',              gradient: 'from-purple-600 to-violet-500', glow: 'hover:shadow-purple-500/20' },
-  { icon: Target,   title: 'Resume Analyzer',      desc: 'ATS scoring, one-click bullet improvements, keyword gap fix. From upload to offer-ready in minutes.',          gradient: 'from-pink-600 to-rose-500',     glow: 'hover:shadow-pink-500/20' },
-  { icon: Award,    title: 'Certifications',       desc: 'Earn verifiable DSA, System Design & Frontend certs. One-click sync to your LinkedIn profile.',                gradient: 'from-cyan-600 to-sky-500',      glow: 'hover:shadow-cyan-500/20' },
+const NAV_LINKS = ['Features', 'How it works', 'Domains', 'Pricing'];
+
+const FEATURES = [
+  { icon: Brain,     title: 'AI Interview Coach',   gradient: 'from-violet-500 to-purple-600', glow: 'group-hover:shadow-violet-500/20',  desc: 'Claude-powered mock interviews with real-time feedback on answers, tone, and technical depth.' },
+  { icon: Code2,     title: 'Coding Playground',    gradient: 'from-blue-500 to-cyan-600',     glow: 'group-hover:shadow-blue-500/20',    desc: '5,000+ problems, multi-language editor, test cases, and AI code review — all in one tab.' },
+  { icon: Zap,       title: 'Skill Gap Analyzer',   gradient: 'from-amber-500 to-orange-600',  glow: 'group-hover:shadow-amber-500/20',   desc: 'AI maps your weak areas to your target role and builds a personalized daily study plan.' },
+  { icon: BarChart3, title: 'Progress Analytics',   gradient: 'from-emerald-500 to-teal-600',  glow: 'group-hover:shadow-emerald-500/20', desc: 'Streaks, skill radars, accuracy trends, and weekly scorecards to keep you motivated.' },
+  { icon: Target,    title: 'Resume Analyzer',      gradient: 'from-pink-500 to-rose-600',     glow: 'group-hover:shadow-pink-500/20',    desc: 'ATS scoring, one-click bullet improvements, and keyword gap analysis. Offer-ready in minutes.' },
+  { icon: Award,     title: 'Certifications',       gradient: 'from-cyan-500 to-sky-600',      glow: 'group-hover:shadow-cyan-500/20',    desc: 'Earn verifiable DSA, System Design & Frontend certs. One-click LinkedIn profile sync.' },
 ];
 
-const domains = [
-  { icon: '🧩', name: 'DSA & Algorithms', count: '5,000+', bg: 'from-blue-500/15 to-cyan-500/5    border-blue-500/20' },
-  { icon: '🏗️', name: 'System Design',    count: '200+',   bg: 'from-purple-500/15 to-violet-500/5 border-purple-500/20' },
-  { icon: '☕', name: 'Java / Spring',     count: '450+',   bg: 'from-orange-500/15 to-amber-500/5  border-orange-500/20' },
-  { icon: '🐍', name: 'Python',           count: '380+',   bg: 'from-emerald-500/15 to-teal-500/5  border-emerald-500/20' },
-  { icon: '⚛️', name: 'React & Frontend', count: '350+',   bg: 'from-sky-500/15 to-blue-500/5      border-sky-500/20' },
-  { icon: '☁️', name: 'Cloud & AWS',      count: '320+',   bg: 'from-yellow-500/15 to-amber-500/5  border-yellow-500/20' },
-  { icon: '🐳', name: 'Docker & K8s',     count: '200+',   bg: 'from-cyan-500/15 to-teal-500/5     border-cyan-500/20' },
-  { icon: '🤖', name: 'AI Engineering',   count: '150+',   bg: 'from-pink-500/15 to-rose-500/5     border-pink-500/20' },
+const STEPS = [
+  { num: '01', emoji: '🎯', title: 'Create your profile',     desc: 'Tell us your target role, dream company, and timeline. Takes 30 seconds.' },
+  { num: '02', emoji: '🗺️', title: 'Get your learning path',  desc: 'AI builds a personalized daily plan covering DSA, System Design, and MCQs.' },
+  { num: '03', emoji: '🤖', title: 'Practice with AI coach',  desc: 'Mock interviews, code reviews, resume analysis — everything scored in real time.' },
+  { num: '04', emoji: '🏆', title: 'Land your dream job',     desc: 'Match with top recruiters, track applications, and celebrate your offer.' },
 ];
 
-const companies = ['Google','Amazon','Microsoft','Meta','Apple','Netflix','Flipkart','Swiggy','Zomato','Razorpay','Atlassian','Adobe','Uber','Stripe','Paytm'];
-
-const testimonials = [
-  { name: 'Riya Verma',  role: 'SDE2 @ Google',          avatar: 'RV', color: 'from-blue-600 to-cyan-500',    rating: 5, text: 'The AI interview bot is uncannily realistic. It asked exactly the follow-up questions I faced in my actual Google interview.' },
-  { name: 'Karan Shah',  role: 'Senior SDE @ Amazon',     avatar: 'KS', color: 'from-purple-600 to-pink-500',  rating: 5, text: 'Went from 45% MCQ accuracy to 89% in 8 weeks. The personalized learning path was a complete game changer for me.' },
-  { name: 'Ananya Iyer', role: 'ML Engineer @ Microsoft', avatar: 'AI', color: 'from-emerald-600 to-teal-500', rating: 5, text: 'Resume analyzer helped me rewrite bullet points with actual metrics. Got callbacks from 8 of 10 applications!' },
+const DOMAINS = [
+  { emoji: '🧩', name: 'DSA & Algorithms', count: '5,000+', bg: 'from-blue-600/20 to-blue-600/5',       border: 'border-blue-500/30'    },
+  { emoji: '🏗️', name: 'System Design',    count: '200+',   bg: 'from-violet-600/20 to-violet-600/5',   border: 'border-violet-500/30'  },
+  { emoji: '☕', name: 'Java / Spring',     count: '450+',   bg: 'from-amber-600/20 to-amber-600/5',     border: 'border-amber-500/30'   },
+  { emoji: '🐍', name: 'Python',           count: '380+',   bg: 'from-emerald-600/20 to-emerald-600/5', border: 'border-emerald-500/30' },
+  { emoji: '⚛️', name: 'React & Frontend', count: '350+',   bg: 'from-cyan-600/20 to-cyan-600/5',       border: 'border-cyan-500/30'    },
+  { emoji: '☁️', name: 'Cloud & AWS',      count: '320+',   bg: 'from-yellow-600/20 to-yellow-600/5',   border: 'border-yellow-500/30'  },
+  { emoji: '🐳', name: 'Docker & K8s',     count: '200+',   bg: 'from-teal-600/20 to-teal-600/5',       border: 'border-teal-500/30'    },
+  { emoji: '🤖', name: 'AI Engineering',   count: '150+',   bg: 'from-pink-600/20 to-pink-600/5',       border: 'border-pink-500/30'    },
 ];
 
-const steps = [
-  { step: '01', icon: '🎯', title: 'Create your account',      desc: 'Sign up free in 30 seconds. Set your target role, company, and timeline.' },
-  { step: '02', icon: '🗺️', title: 'Follow your learning path', desc: 'AI-curated daily plan. DSA, System Design, MCQs — all sequenced for you.' },
-  { step: '03', icon: '🤖', title: 'Practice & get feedback',   desc: 'Mock interviews, AI code review, resume analysis — everything scored.' },
-  { step: '04', icon: '🏆', title: 'Land your dream role',      desc: 'Match with top recruiters. Track applications. Celebrate your offer.' },
+const COMPANIES = ['Google', 'Amazon', 'Microsoft', 'Meta', 'Apple', 'Netflix', 'Flipkart', 'Swiggy', 'Zomato', 'Razorpay', 'Atlassian', 'Adobe', 'Uber', 'Stripe', 'Paytm'];
+
+const TESTIMONIALS = [
+  { name: 'Riya Verma',  role: 'SDE2 @ Google',          avatar: 'RV', color: 'from-blue-500 to-cyan-500',     rating: 5, quote: 'The AI interview bot asked exactly the follow-up questions I faced in my real Google interview. Genuinely uncanny.' },
+  { name: 'Karan Shah',  role: 'Senior SDE @ Amazon',     avatar: 'KS', color: 'from-violet-500 to-purple-600', rating: 5, quote: 'Went from 45% MCQ accuracy to 89% in 8 weeks. The personalized learning path was an absolute game changer.' },
+  { name: 'Ananya Iyer', role: 'ML Engineer @ Microsoft', avatar: 'AI', color: 'from-emerald-500 to-teal-600',  rating: 5, quote: 'Resume analyzer helped me rewrite bullets with actual metrics. Got callbacks from 8 out of 10 applications!' },
 ];
 
-const plans = [
-  { name: 'Free',       price: '₹0',    period: '',       highlight: false, badge: null,           cta: 'Get Started Free', link: '/register',
-    features: ['5 Daily challenges','50 MCQ questions','Basic learning paths','Community access','1 mock interview/month'] },
-  { name: 'Pro',        price: '₹999',  period: '/month', highlight: true,  badge: 'Most Popular', cta: 'Upgrade to Pro',   link: '/pricing',
-    features: ['Everything in Basic','Unlimited MCQ + Coding','Unlimited mock interviews','AI Interview Coach (unlimited)','Resume analyzer','System design lab','Analytics & reports','Certifications'] },
-  { name: 'Enterprise', price: 'Custom', period: '',       highlight: false, badge: 'Teams',        cta: 'Contact Sales',    link: '/pricing',
-    features: ['Everything in Pro','Team management (20 seats)','Custom learning paths','Dedicated account manager','White-label options','Priority 24/7 support','API access'] },
+const PLANS = [
+  {
+    name: 'Free', price: '₹0', period: '', cta: 'Get Started Free', link: '/register', highlight: false, badge: null,
+    features: ['5 daily challenges', '50 MCQ questions', 'Basic learning paths', 'Community access', '1 mock interview / month'],
+  },
+  {
+    name: 'Pro', price: '₹999', period: '/month', cta: 'Upgrade to Pro', link: '/pricing', highlight: true, badge: 'Most Popular',
+    features: ['Unlimited MCQ + Coding', 'AI Interview Coach (unlimited)', 'Resume analyzer', 'System design lab', 'Analytics & reports', 'Certifications'],
+  },
+  {
+    name: 'Enterprise', price: 'Custom', period: '', cta: 'Contact Sales', link: '/pricing', highlight: false, badge: 'Teams',
+    features: ['Everything in Pro', 'Team management (20 seats)', 'Custom learning paths', 'Dedicated account manager', 'White-label options', 'Priority 24/7 support'],
+  },
 ];
 
-// ─── animated counter ─────────────────────────────────────────────────────────
+// ─── Animated counter ──────────────────────────────────────────────────────────
 
 function AnimatedCounter({ end, suffix, label }: { end: number; suffix: string; label: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -79,8 +89,7 @@ function AnimatedCounter({ end, suffix, label }: { end: number; suffix: string; 
       const dur = 1800, start = performance.now();
       const tick = (now: number) => {
         const t = Math.min((now - start) / dur, 1);
-        const ease = 1 - Math.pow(1 - t, 3);
-        setCount(Math.floor(ease * end));
+        setCount(Math.floor((1 - Math.pow(1 - t, 3)) * end));
         if (t < 1) requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
@@ -88,154 +97,229 @@ function AnimatedCounter({ end, suffix, label }: { end: number; suffix: string; 
     obs.observe(el);
     return () => obs.disconnect();
   }, [end]);
+
   return (
     <div ref={ref} className="text-center">
       <p className="text-3xl sm:text-4xl font-black text-white tabular-nums">
         {count >= 1000 ? `${(count / 1000).toFixed(count >= 100000 ? 0 : 1)}K` : count}
-        <span className="text-blue-400">{suffix}</span>
+        <span className="text-violet-400">{suffix}</span>
       </p>
       <p className="text-sm text-slate-500 mt-1">{label}</p>
     </div>
   );
 }
 
-// ─── page ─────────────────────────────────────────────────────────────────────
+// ─── Section label pill ────────────────────────────────────────────────────────
+
+function SectionLabel({ color, children }: { color: string; children: React.ReactNode }) {
+  return (
+    <p className={`text-xs font-bold uppercase tracking-widest mb-4 ${color}`}>{children}</p>
+  );
+}
+
+// ─── Main component ────────────────────────────────────────────────────────────
 
 const Landing: React.FC = () => {
   const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
   useEffect(() => {
-    const t = setInterval(() => setActiveTestimonial(p => (p + 1) % testimonials.length), 4500);
+    const t = setInterval(() => setActiveTestimonial(p => (p + 1) % TESTIMONIALS.length), 4500);
     return () => clearInterval(t);
   }, []);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white overflow-x-hidden">
 
-      {/* ───────── NAVBAR ───────── */}
-      <nav className="fixed top-0 inset-x-0 z-50 h-16 flex items-center border-b border-white/5 bg-slate-950/80 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
+      {/* ── NAVBAR ───────────────────────────────────────────────────────────── */}
+      <nav className="fixed top-0 inset-x-0 z-50 border-b border-slate-800 bg-slate-950/95 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2.5 shrink-0">
             <img src={logo} alt="Avantika" className="w-8 h-8 rounded-lg object-contain" />
-            <span className="font-black text-lg tracking-tight text-white">Avantika</span>
-          </div>
-          <div className="hidden md:flex items-center gap-8">
-            {['Features','Domains','Pricing','Community'].map(item => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-medium text-slate-400 hover:text-white transition-colors">{item}</a>
+            <span className="font-black text-lg text-white tracking-tight">Avantika</span>
+          </Link>
+
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-7">
+            {NAV_LINKS.map(l => (
+              <a key={l} href={`#${l.toLowerCase().replace(/\s+/g, '-')}`}
+                className="text-sm font-medium text-slate-400 hover:text-white transition-colors">
+                {l}
+              </a>
             ))}
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => navigate('/login')} className="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">Sign in</button>
+
+          {/* Desktop CTA */}
+          <div className="hidden md:flex items-center gap-2">
+            <button onClick={() => navigate('/login')}
+              className="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white transition-colors">
+              Sign in
+            </button>
             <button onClick={() => navigate('/register')}
-              className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 shadow-lg shadow-blue-600/25 transition-all flex items-center gap-1.5">
-              Get Started <ArrowRight size={13} />
+              className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-violet-600 hover:bg-violet-500 transition-colors shadow-lg shadow-violet-600/25 flex items-center gap-1.5">
+              Get started free <ArrowRight size={13} />
             </button>
           </div>
+
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            onClick={() => setMobileOpen(p => !p)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <XClose size={20} /> : <Menu size={20} />}
+          </button>
         </div>
+
+        {/* Mobile dropdown */}
+        {mobileOpen && (
+          <div className="md:hidden border-t border-slate-800 bg-slate-950 px-4 py-4 space-y-1">
+            {NAV_LINKS.map(l => (
+              <a key={l} href={`#${l.toLowerCase().replace(/\s+/g, '-')}`}
+                onClick={() => setMobileOpen(false)}
+                className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors">
+                {l}
+              </a>
+            ))}
+            <div className="pt-3 flex flex-col gap-2 border-t border-slate-800 mt-3">
+              <button onClick={() => { navigate('/login'); setMobileOpen(false); }}
+                className="w-full px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 border border-slate-700 hover:bg-slate-800 transition-colors">
+                Sign in
+              </button>
+              <button onClick={() => { navigate('/register'); setMobileOpen(false); }}
+                className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-violet-600 hover:bg-violet-500 transition-colors">
+                Get started free
+              </button>
+            </div>
+          </div>
+        )}
       </nav>
 
-      {/* ───────── HERO ───────── */}
-      <section className="relative pt-28 pb-24 px-4 dot-grid overflow-hidden">
-        {/* Orbs */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-blue-600/8 rounded-full blur-[140px] pointer-events-none glow-pulse" />
-        <div className="absolute top-32 left-[12%] w-[380px] h-[380px] bg-violet-600/10 rounded-full blur-[100px] pointer-events-none glow-pulse" style={{animationDelay:'2s'}} />
-        <div className="absolute top-40 right-[8%] w-[300px] h-[300px] bg-cyan-600/8 rounded-full blur-[90px] pointer-events-none glow-pulse" style={{animationDelay:'1s'}} />
+      {/* ── HERO ─────────────────────────────────────────────────────────────── */}
+      <section className="relative pt-28 pb-24 px-4 sm:px-6 dot-grid overflow-hidden">
+        {/* Background glows */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-violet-600/15 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute top-40 left-[8%] w-[320px] h-[320px] bg-blue-600/12 rounded-full blur-[90px] pointer-events-none" />
+        <div className="absolute top-32 right-[6%] w-[280px] h-[280px] bg-cyan-600/10 rounded-full blur-[80px] pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto text-center">
-          {/* Pill */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-sm font-medium mb-8 fade-up">
-            <Sparkles size={13} className="text-blue-400" />
+        <div className="max-w-5xl mx-auto text-center">
+
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-300 text-sm font-medium mb-8 fade-up">
+            <Sparkles size={13} />
             AI-Powered Technical Interview Preparation
-            <span className="ml-1 px-1.5 py-0.5 text-xs font-bold rounded-md bg-blue-500/25 text-blue-200">NEW</span>
+            <span className="px-1.5 py-0.5 text-xs font-bold rounded bg-violet-500/30 text-violet-200">NEW</span>
           </div>
 
           {/* Headline */}
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.06] mb-6 fade-up" style={{animationDelay:'0.1s'}}>
-            Land Your{' '}
-            <span className="relative">
-              <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-cyan-400 bg-clip-text text-transparent">Dream Tech Job</span>
-              <span className="absolute -bottom-1 left-0 right-0 h-px bg-gradient-to-r from-blue-400 via-violet-400 to-cyan-400 opacity-50 rounded-full" />
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-6 fade-up" style={{ animationDelay: '0.1s' }}>
+            Crack your{' '}
+            <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              dream tech job
             </span>
             <br />
-            <span className="text-slate-300">with AI Coaching</span>
+            <span className="text-slate-300 text-4xl sm:text-5xl lg:text-6xl">with AI coaching</span>
           </h1>
 
-          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed fade-up" style={{animationDelay:'0.2s'}}>
-            The only platform combining AI mock interviews, 5,000+ coding problems, system design labs, and
-            resume analysis. Used by engineers at Google, Amazon, Microsoft & more.
+          {/* Subheading */}
+          <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed fade-up" style={{ animationDelay: '0.2s' }}>
+            AI mock interviews · 5,000+ coding problems · system design labs · resume analysis.
+            <br className="hidden sm:block" />
+            Everything to take you from prep to placement.
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 fade-up" style={{animationDelay:'0.3s'}}>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10 fade-up" style={{ animationDelay: '0.3s' }}>
             <button onClick={() => navigate('/register')}
-              className="group px-7 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 shadow-xl shadow-blue-600/30 transition-all flex items-center justify-center gap-2.5 text-base">
-              Start for Free — No Credit Card
+              className="group px-7 py-3.5 rounded-xl font-semibold text-white bg-violet-600 hover:bg-violet-500 shadow-xl shadow-violet-600/30 transition-all flex items-center justify-center gap-2.5 text-base">
+              Start for free — no credit card
               <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
             </button>
-            <button className="px-7 py-3.5 rounded-xl font-semibold text-slate-300 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all flex items-center justify-center gap-2.5 text-base">
-              <Play size={15} className="text-slate-400" /> Watch 2-min Demo
+            <button className="px-7 py-3.5 rounded-xl font-semibold text-slate-300 border border-slate-700 hover:border-slate-600 hover:bg-slate-800/50 transition-all flex items-center justify-center gap-2.5 text-base">
+              <Play size={14} fill="currentColor" className="text-slate-400" />
+              Watch 2-min demo
             </button>
           </div>
 
-          {/* Animated stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mb-16 fade-up" style={{animationDelay:'0.4s'}}>
-            <AnimatedCounter end={75}    suffix="K+"  label="Active Learners" />
-            <AnimatedCounter end={2400}  suffix="K+"  label="Problems Solved" />
-            <AnimatedCounter end={12}    suffix="K+"  label="Offers Received" />
-            <AnimatedCounter end={500}   suffix="+"   label="Company Partners" />
+          {/* Trust line */}
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-slate-500 mb-16 fade-up" style={{ animationDelay: '0.35s' }}>
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={13} className="text-green-500" /> Free forever plan</span>
+            <span className="text-slate-700 hidden sm:inline">·</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={13} className="text-green-500" /> No credit card required</span>
+            <span className="text-slate-700 hidden sm:inline">·</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={13} className="text-green-500" /> 75,000+ engineers trust us</span>
           </div>
 
-          {/* Platform mockup */}
-          <div className="relative max-w-4xl mx-auto float-slow fade-up" style={{animationDelay:'0.5s'}}>
-            <div className="absolute -inset-3 bg-gradient-to-r from-blue-600/15 via-violet-600/15 to-cyan-600/15 rounded-3xl blur-2xl" />
-            <div className="relative bg-slate-900/90 backdrop-blur-sm border border-white/8 rounded-2xl overflow-hidden shadow-2xl">
-              {/* Browser chrome */}
-              <div className="flex items-center gap-3 px-4 py-3 bg-slate-800/70 border-b border-white/5">
+          {/* Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto mb-16 fade-up" style={{ animationDelay: '0.4s' }}>
+            <AnimatedCounter end={75}   suffix="K+" label="Active Learners" />
+            <AnimatedCounter end={2400} suffix="K+" label="Problems Solved" />
+            <AnimatedCounter end={12}   suffix="K+" label="Offers Received" />
+            <AnimatedCounter end={500}  suffix="+"  label="Company Partners" />
+          </div>
+
+          {/* Dashboard preview */}
+          <div className="relative max-w-4xl mx-auto float-slow fade-up" style={{ animationDelay: '0.5s' }}>
+            <div className="absolute -inset-4 bg-gradient-to-r from-violet-600/10 via-blue-600/10 to-cyan-600/10 rounded-3xl blur-2xl" />
+            <div className="relative bg-slate-900 border border-slate-700 rounded-2xl overflow-hidden shadow-2xl">
+              {/* Browser bar */}
+              <div className="flex items-center gap-3 px-5 py-3.5 bg-slate-800 border-b border-slate-700">
                 <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-500/70" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/70" />
+                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
                 </div>
-                <div className="flex-1 bg-slate-700/50 rounded-lg px-3 py-1 text-xs text-slate-500 text-center max-w-xs mx-auto">
+                <div className="flex-1 bg-slate-700 rounded-md px-3 py-1 text-xs text-slate-400 text-center max-w-xs mx-auto">
                   app.avantika.io/dashboard
                 </div>
-                <div className="w-14 h-1.5 rounded bg-slate-700/40" />
               </div>
-              {/* Dashboard preview cards */}
-              <div className="p-5 grid grid-cols-3 gap-4">
-                <div className="bg-slate-800/60 border border-white/5 rounded-xl p-4">
-                  <div className="flex items-center justify-between mb-2">
+
+              {/* Preview cards */}
+              <div className="p-5 grid grid-cols-3 gap-4 bg-slate-950/50">
+                {/* Card 1 */}
+                <div className="bg-slate-800 border border-slate-700 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-3">
                     <span className="text-xs text-slate-400 font-medium">Interview Readiness</span>
                     <TrendingUp size={12} className="text-green-400" />
                   </div>
-                  <p className="text-3xl font-black text-white mb-2">72<span className="text-sm font-medium text-slate-500">%</span></p>
-                  <div className="h-1.5 bg-slate-700 rounded-full"><div className="h-full w-[72%] rounded-full bg-gradient-to-r from-blue-500 to-cyan-400" /></div>
+                  <p className="text-3xl font-black text-white mb-2.5">72<span className="text-sm font-medium text-slate-500">%</span></p>
+                  <div className="h-1.5 bg-slate-700 rounded-full">
+                    <div className="h-full w-[72%] bg-gradient-to-r from-violet-500 to-blue-500 rounded-full" />
+                  </div>
                   <p className="text-xs text-green-400 mt-2">↑ 8% this week</p>
                 </div>
-                <div className="bg-slate-800/60 border border-white/5 rounded-xl p-4">
+                {/* Card 2 */}
+                <div className="bg-slate-800 border border-slate-700 rounded-xl p-4">
                   <p className="text-xs text-slate-400 mb-3 font-medium">Current Streak</p>
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-2xl">🔥</span>
                     <span className="text-3xl font-black text-white">14</span>
-                    <span className="text-xs text-slate-400">days</span>
+                    <span className="text-xs text-slate-500">days</span>
                   </div>
                   <div className="flex gap-0.5">
-                    {[1,1,1,1,1,0,1,1,1,1,1,1,1,1].map((d,i)=>(
-                      <div key={i} className={`flex-1 h-1.5 rounded-sm ${d?'bg-orange-400':'bg-slate-700'}`} />
+                    {[1,1,1,1,1,0,1,1,1,1,1,1,1,1].map((d, i) => (
+                      <div key={i} className={`flex-1 h-1.5 rounded-sm ${d ? 'bg-orange-400' : 'bg-slate-700'}`} />
                     ))}
                   </div>
                 </div>
-                <div className="bg-slate-800/60 border border-white/5 rounded-xl p-4">
+                {/* Card 3 */}
+                <div className="bg-slate-800 border border-slate-700 rounded-xl p-4">
                   <p className="text-xs text-slate-400 mb-3 font-medium">Today's Tasks</p>
                   <div className="space-y-2">
-                    {[{t:'Merge Intervals',done:true,tag:'DSA'},{t:'5 Java MCQs',done:false,tag:'MCQ'},{t:'CAP Theorem',done:false,tag:'SD'}].map(item=>(
+                    {[
+                      { t: 'Merge Intervals', done: true,  tag: 'DSA' },
+                      { t: '5 Java MCQs',     done: false, tag: 'MCQ' },
+                      { t: 'CAP Theorem',     done: false, tag: 'SD'  },
+                    ].map(item => (
                       <div key={item.t} className="flex items-center gap-2">
-                        <div className={`w-3.5 h-3.5 rounded-full border shrink-0 flex items-center justify-center ${item.done?'bg-green-500 border-green-500':'border-slate-600'}`}>
-                          {item.done && <CheckCircle2 size={8} className="text-white" />}
+                        <div className={`w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center ${item.done ? 'bg-green-500 border-green-500' : 'border-slate-600'}`}>
+                          {item.done && <CheckCircle2 size={9} className="text-white" />}
                         </div>
-                        <span className={`text-xs flex-1 ${item.done?'line-through text-slate-600':'text-slate-300'}`}>{item.t}</span>
-                        <span className="text-xs px-1.5 py-0.5 rounded bg-slate-700/80 text-slate-400">{item.tag}</span>
+                        <span className={`text-xs flex-1 truncate ${item.done ? 'line-through text-slate-600' : 'text-slate-300'}`}>{item.t}</span>
+                        <span className="text-xs px-1.5 py-0.5 rounded-md bg-slate-700 text-slate-400 font-mono">{item.tag}</span>
                       </div>
                     ))}
                   </div>
@@ -246,63 +330,72 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* ───────── MARQUEE ───────── */}
-      <section className="py-10 border-y border-white/5 bg-slate-900/30 overflow-hidden">
-        <p className="text-center text-xs text-slate-600 font-semibold uppercase tracking-widest mb-6">Trusted by engineers at</p>
+      {/* ── COMPANY MARQUEE ──────────────────────────────────────────────────── */}
+      <section className="py-12 border-y border-slate-800 bg-slate-900/50 overflow-hidden">
+        <p className="text-center text-xs text-slate-600 font-semibold uppercase tracking-widest mb-6">
+          Trusted by engineers at
+        </p>
         <div className="overflow-hidden">
-          <div className="marquee-track gap-14 px-8">
-            {[...companies, ...companies].map((c, i) => (
-              <span key={i} className="text-slate-500 hover:text-slate-300 font-bold text-sm tracking-wider transition-colors whitespace-nowrap cursor-default">{c}</span>
+          <div className="marquee-track">
+            {[...COMPANIES, ...COMPANIES].map((c, i) => (
+              <span key={i} className="mx-8 text-slate-500 hover:text-slate-300 font-bold text-sm tracking-wide transition-colors whitespace-nowrap cursor-default">
+                {c}
+              </span>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ───────── FEATURES ───────── */}
+      {/* ── FEATURES ─────────────────────────────────────────────────────────── */}
       <section id="features" className="py-24 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-sm font-medium mb-5">
-              <Zap size={13} /> Features
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">Everything you need to get hired</h2>
-            <p className="text-slate-400 text-lg max-w-xl mx-auto">One platform. All tools. From your first line of code to your final offer.</p>
+          <div className="text-center mb-14">
+            <SectionLabel color="text-violet-400">Features</SectionLabel>
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">
+              Everything you need to get hired
+            </h2>
+            <p className="text-slate-400 text-lg max-w-xl mx-auto">
+              One platform. All the tools. From your first line of code to your final offer.
+            </p>
           </div>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {features.map(f => (
-              <div key={f.title} className={`group relative bg-slate-900/60 border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${f.glow} cursor-default`}>
+            {FEATURES.map(f => (
+              <div key={f.title}
+                className={`group bg-slate-900 border border-slate-700/60 rounded-2xl p-6 hover:border-slate-600 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${f.glow}`}>
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                   <f.icon size={22} className="text-white" />
                 </div>
                 <h3 className="font-bold text-white text-lg mb-2">{f.title}</h3>
                 <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
-                <div className="absolute bottom-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <ChevronRight size={15} className="text-slate-600" />
-                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ───────── HOW IT WORKS ───────── */}
-      <section className="py-24 px-4 sm:px-6 bg-slate-900/30">
+      {/* ─�� HOW IT WORKS ─────────────────────────────────────────────────────── */}
+      <section id="how-it-works" className="py-24 px-4 sm:px-6 bg-slate-900/50">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-sm font-medium mb-5">
-              <Clock size={13} /> How it works
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white">Go from zero to offer</h2>
+          <div className="text-center mb-14">
+            <SectionLabel color="text-emerald-400">How it works</SectionLabel>
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white">
+              From zero to offer in 4 steps
+            </h2>
           </div>
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {steps.map((s, i) => (
-              <div key={s.step} className="bg-slate-900/60 border border-white/5 rounded-2xl p-5 hover:border-white/10 transition-colors relative">
-                {i < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-8 left-full w-full h-px bg-gradient-to-r from-slate-700 to-transparent z-0 -translate-y-0.5" />
+            {STEPS.map((s, i) => (
+              <div key={s.num}
+                className="relative bg-slate-900 border border-slate-700/60 rounded-2xl p-6 hover:border-slate-600 transition-colors">
+                {i < STEPS.length - 1 && (
+                  <div className="hidden lg:block absolute top-9 left-[calc(100%+2px)] w-5 h-px bg-gradient-to-r from-slate-600 to-transparent z-10" />
                 )}
-                <div className="text-3xl mb-3">{s.icon}</div>
-                <div className="text-xs font-bold text-slate-600 font-mono mb-1">STEP {s.step}</div>
-                <h3 className="font-bold text-white mb-2">{s.title}</h3>
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-2xl">{s.emoji}</span>
+                  <span className="text-xs font-bold text-slate-600 font-mono tracking-wider">STEP {s.num}</span>
+                </div>
+                <h3 className="font-bold text-white text-base mb-2">{s.title}</h3>
                 <p className="text-sm text-slate-400 leading-relaxed">{s.desc}</p>
               </div>
             ))}
@@ -310,20 +403,22 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* ───────── DOMAINS ───────── */}
+      {/* ── DOMAINS ──────────────────────────────────────────────────────────── */}
       <section id="domains" className="py-24 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-sm font-medium mb-5">
-              <Code2 size={13} /> Domains
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">Cover every domain</h2>
+            <SectionLabel color="text-cyan-400">Domains</SectionLabel>
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">
+              Cover every domain
+            </h2>
             <p className="text-slate-400 text-lg">Fresher to Staff Engineer — we have content for every level.</p>
           </div>
+
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {domains.map(d => (
-              <div key={d.name} className={`group bg-gradient-to-br ${d.bg} border rounded-2xl p-5 text-center hover:-translate-y-1 transition-all duration-200 cursor-default`}>
-                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-200">{d.icon}</div>
+            {DOMAINS.map(d => (
+              <div key={d.name}
+                className={`group bg-gradient-to-br ${d.bg} border ${d.border} rounded-2xl p-5 text-center hover:-translate-y-1 transition-all duration-200 cursor-default`}>
+                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-200">{d.emoji}</div>
                 <div className="font-semibold text-white text-sm mb-1">{d.name}</div>
                 <div className="text-xs text-slate-400">{d.count} questions</div>
               </div>
@@ -332,29 +427,36 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* ───────── TESTIMONIALS ───────── */}
-      <section className="py-24 px-4 sm:px-6 bg-slate-900/30">
+      {/* ── TESTIMONIALS ─────────────────────────────────────────────────────── */}
+      <section className="py-24 px-4 sm:px-6 bg-slate-900/50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-300 text-sm font-medium mb-5">
-              <Star size={13} /> Success Stories
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white">Engineers love Avantika</h2>
+            <SectionLabel color="text-yellow-400">Success Stories</SectionLabel>
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white">
+              Engineers love Avantika
+            </h2>
           </div>
+
           <div className="grid md:grid-cols-3 gap-5 mb-8">
-            {testimonials.map((t, i) => (
+            {TESTIMONIALS.map((t, i) => (
               <div key={t.name} onClick={() => setActiveTestimonial(i)}
-                className={`relative bg-slate-900/60 border rounded-2xl p-6 cursor-pointer transition-all duration-300
-                  ${activeTestimonial === i ? 'border-white/20 shadow-2xl -translate-y-1' : 'border-white/5 hover:border-white/10'}`}>
-                <div className="text-4xl font-serif text-slate-700 leading-none mb-3 select-none">"</div>
-                <div className="flex gap-0.5 mb-4">
-                  {Array.from({length:t.rating}).map((_,j) => (
-                    <Star key={j} size={12} className="fill-yellow-400 text-yellow-400" />
+                className={`bg-slate-900 rounded-2xl p-6 cursor-pointer transition-all duration-300 border
+                  ${activeTestimonial === i
+                    ? 'border-violet-500/60 shadow-xl shadow-violet-500/10 -translate-y-1'
+                    : 'border-slate-700/60 hover:border-slate-600'}`}>
+                {/* Stars */}
+                <div className="flex gap-1 mb-4">
+                  {Array.from({ length: t.rating }).map((_, j) => (
+                    <Star key={j} size={13} className="fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
-                <p className="text-slate-300 text-sm leading-relaxed mb-5 italic">"{t.text}"</p>
+                {/* Quote */}
+                <p className="text-slate-300 text-sm leading-relaxed mb-6">"{t.quote}"</p>
+                {/* Author */}
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-white font-bold text-sm shrink-0`}>{t.avatar}</div>
+                  <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-white font-bold text-sm shrink-0`}>
+                    {t.avatar}
+                  </div>
                   <div>
                     <p className="font-semibold text-white text-sm">{t.name}</p>
                     <p className="text-xs text-slate-500">{t.role}</p>
@@ -363,44 +465,50 @@ const Landing: React.FC = () => {
               </div>
             ))}
           </div>
+
+          {/* Dots */}
           <div className="flex justify-center gap-2">
-            {testimonials.map((_,i) => (
+            {TESTIMONIALS.map((_, i) => (
               <button key={i} onClick={() => setActiveTestimonial(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${i===activeTestimonial?'bg-blue-500 w-6':'bg-slate-700 w-1.5'}`} />
+                className={`h-1.5 rounded-full transition-all duration-300 ${i === activeTestimonial ? 'bg-violet-500 w-6' : 'bg-slate-700 w-1.5 hover:bg-slate-600'}`} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ───────── PRICING ───────── */}
+      {/* ── PRICING ──────────────────────────────────────────────────────────── */}
       <section id="pricing" className="py-24 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-sm font-medium mb-5">
-              <Shield size={13} /> Pricing
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">Simple, transparent pricing</h2>
-            <p className="text-slate-400 text-lg">Start free. Upgrade when you're ready. All plans in INR.</p>
+            <SectionLabel color="text-violet-400">Pricing</SectionLabel>
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">
+              Simple, transparent pricing
+            </h2>
+            <p className="text-slate-400 text-lg">Start free. Upgrade when you're ready. All prices in INR.</p>
           </div>
+
           <div className="grid md:grid-cols-3 gap-6 items-center">
-            {plans.map(plan => (
+            {PLANS.map(plan => (
               <div key={plan.name}
-                className={`relative rounded-2xl p-6 transition-all duration-300
+                className={`relative rounded-2xl p-7 transition-all
                   ${plan.highlight
-                    ? 'bg-gradient-to-b from-blue-950/80 to-violet-950/70 border border-blue-500/40 shadow-2xl shadow-blue-500/15 scale-[1.03]'
-                    : 'bg-slate-900/60 border border-white/5 hover:border-white/10'}`}>
+                    ? 'bg-gradient-to-b from-violet-950/70 to-slate-900 border-2 border-violet-500/50 shadow-2xl shadow-violet-500/15 md:scale-[1.04]'
+                    : 'bg-slate-900 border border-slate-700/60 hover:border-slate-600'}`}>
+
+                {/* Badge */}
                 {plan.badge && (
-                  <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-bold whitespace-nowrap
-                    ${plan.highlight?'bg-blue-500 text-white':'bg-slate-700 text-slate-300 border border-slate-600'}`}>
+                  <div className={`absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap
+                    ${plan.highlight ? 'bg-violet-500 text-white' : 'bg-slate-700 text-slate-300 border border-slate-600'}`}>
                     {plan.badge}
                   </div>
                 )}
+
                 <h3 className="text-lg font-bold text-white mb-1">{plan.name}</h3>
                 <div className="flex items-baseline gap-1 mb-6">
                   <span className="text-4xl font-black text-white">{plan.price}</span>
-                  <span className="text-slate-500 text-sm">{plan.period}</span>
+                  {plan.period && <span className="text-slate-500 text-sm">{plan.period}</span>}
                 </div>
-                <ul className="space-y-2.5 mb-8">
+                <ul className="space-y-3 mb-8">
                   {plan.features.map(feat => (
                     <li key={feat} className="flex items-start gap-2.5 text-sm text-slate-300">
                       <CheckCircle2 size={14} className="text-green-400 mt-0.5 shrink-0" />
@@ -409,11 +517,11 @@ const Landing: React.FC = () => {
                   ))}
                 </ul>
                 <Link to={plan.link}
-                  className={`w-full py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2
+                  className={`block w-full py-3 rounded-xl font-semibold text-sm text-center transition-all
                     ${plan.highlight
-                      ? 'bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white shadow-lg shadow-blue-600/30'
-                      : 'bg-slate-800 hover:bg-slate-700 text-white border border-white/5'}`}>
-                  {plan.cta} <ChevronRight size={14} />
+                      ? 'bg-violet-600 hover:bg-violet-500 text-white shadow-lg shadow-violet-600/30'
+                      : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-700'}`}>
+                  {plan.cta}
                 </Link>
               </div>
             ))}
@@ -421,73 +529,84 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* ───────── CTA ───────── */}
+      {/* ── FINAL CTA ────────────────────────────────────────────────────────── */}
       <section className="relative py-28 px-4 sm:px-6 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-950/50 via-violet-950/40 to-slate-950" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-blue-600/12 rounded-full blur-[100px] glow-pulse" />
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-950/60 via-slate-950 to-blue-950/40" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-violet-600/15 rounded-full blur-[100px]" />
+
         <div className="relative max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300 text-sm font-medium mb-8">
-            <Users size={13} /> Join 75,000+ engineers
+            <Users size={13} /> Join 75,000+ engineers on their journey
           </div>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 tracking-tight leading-tight">
             Ready to land your{' '}
-            <span className="bg-gradient-to-r from-blue-400 via-violet-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
               dream role?
             </span>
           </h2>
-          <p className="text-slate-400 text-xl mb-10">Start free today. No credit card required.</p>
+          <p className="text-slate-400 text-xl mb-10">Start free today. No credit card. No commitments.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button onClick={() => navigate('/register')}
-              className="group px-8 py-4 rounded-xl font-bold text-white text-lg bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 shadow-2xl shadow-blue-600/30 transition-all flex items-center justify-center gap-3">
-              Start Free Today
+              className="group px-8 py-4 rounded-xl font-bold text-white text-base bg-violet-600 hover:bg-violet-500 shadow-2xl shadow-violet-600/30 transition-all flex items-center justify-center gap-2.5">
+              Create free account
               <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
             </button>
             <Link to="/pricing"
-              className="px-8 py-4 rounded-xl font-bold text-slate-300 text-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-center gap-2">
-              View Pricing
+              className="px-8 py-4 rounded-xl font-bold text-slate-300 text-base border border-slate-700 hover:border-slate-600 hover:bg-slate-800/50 transition-all flex items-center justify-center">
+              View all plans
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ───────── FOOTER ───────── */}
-      <footer className="border-t border-white/5 bg-slate-900/30">
+      {/* ── FOOTER ───────────────────────────────────────────────────────────── */}
+      <footer className="border-t border-slate-800 bg-slate-900/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14">
-          <div className="grid md:grid-cols-4 gap-8 mb-10">
+          <div className="grid md:grid-cols-4 gap-10 mb-12">
+
+            {/* Brand */}
             <div>
-              <div className="flex items-center gap-2 mb-4">
+              <Link to="/" className="flex items-center gap-2 mb-4">
                 <img src={logo} alt="Avantika" className="w-8 h-8 rounded-lg object-contain" />
                 <span className="font-black text-white text-lg">Avantika</span>
-              </div>
-              <p className="text-sm text-slate-500 leading-relaxed mb-5">AI-powered interview prep for the modern software engineer.</p>
+              </Link>
+              <p className="text-sm text-slate-500 leading-relaxed mb-5">
+                AI-powered interview prep for the modern software engineer.
+              </p>
               <div className="flex gap-2">
                 {([
-                  { href: '#', label: 'X', el: <XIcon /> },
-                  { href: '#', label: 'LinkedIn', el: <Linkedin size={13} /> },
-                  { href: '#', label: 'GitHub', el: <GithubIcon /> },
-                ] as const).map(({ href, label, el }) => (
-                  <a key={label} href={href} aria-label={label} className="w-8 h-8 rounded-lg bg-slate-800 border border-white/5 flex items-center justify-center text-slate-500 hover:text-white hover:bg-slate-700 transition-colors">
+                  { label: 'X',        el: <XIcon /> },
+                  { label: 'LinkedIn', el: <Linkedin size={13} /> },
+                  { label: 'GitHub',   el: <GithubIcon /> },
+                ] as const).map(({ label, el }) => (
+                  <a key={label} href="#" aria-label={label}
+                    className="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-500 hover:text-white hover:bg-slate-700 transition-colors">
                     {el}
                   </a>
                 ))}
               </div>
             </div>
+
+            {/* Link columns */}
             {[
-              {title:'Product', links:['Features','Pricing','Domains','Roadmap']},
-              {title:'Company', links:['About','Blog','Careers','Press']},
-              {title:'Legal',   links:['Privacy','Terms','Security','Status']},
+              { title: 'Product', links: ['Features', 'Pricing', 'Domains', 'Roadmap'] },
+              { title: 'Company', links: ['About', 'Blog', 'Careers', 'Press'] },
+              { title: 'Legal',   links: ['Privacy', 'Terms', 'Security', 'Status'] },
             ].map(col => (
               <div key={col.title}>
                 <h4 className="text-sm font-semibold text-white mb-4">{col.title}</h4>
-                <ul className="space-y-2.5">
+                <ul className="space-y-3">
                   {col.links.map(link => (
-                    <li key={link}><a href="#" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">{link}</a></li>
+                    <li key={link}>
+                      <a href="#" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">{link}</a>
+                    </li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
-          <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-3">
+
+          <div className="border-t border-slate-800 pt-8 flex flex-col sm:flex-row justify-between items-center gap-3">
             <p className="text-sm text-slate-600">© 2026 Avantika Technologies Pvt. Ltd.</p>
             <p className="text-xs text-slate-700">Made with ❤️ for engineers in India</p>
           </div>

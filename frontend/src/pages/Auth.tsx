@@ -1,9 +1,70 @@
 import React, { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { Mail, Lock, User, Eye, EyeOff, ArrowRight, AlertCircle } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, ArrowRight, AlertCircle, CheckCircle2, Sparkles } from 'lucide-react';
 import { Button, Input, Card } from '../components/ui';
 import { useStore } from '../store/useStore';
 import logo from '../assets/logo.png';
+
+// ─── Shared left panel ───────────────────────────────────────────────────────
+const AuthPanel = ({ title, subtitle }: { title: string; subtitle: string }) => (
+  <div className="hidden lg:flex flex-col justify-between flex-1 relative overflow-hidden bg-gradient-to-br from-slate-900 via-violet-950/30 to-slate-900 border-r border-slate-800/60 px-14 py-12">
+    {/* Background orbs */}
+    <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-blue-600/8 rounded-full blur-3xl pointer-events-none" />
+
+    {/* Logo */}
+    <Link to="/" className="relative flex items-center gap-3 w-fit">
+      <img src={logo} alt="Avantika" className="w-10 h-10 object-contain rounded-xl shadow-lg shadow-violet-500/20" />
+      <div>
+        <p className="font-black text-white text-lg leading-none">Avantika</p>
+        <p className="text-xs text-violet-400 font-medium">Interview Prep</p>
+      </div>
+    </Link>
+
+    {/* Hero text */}
+    <div className="relative">
+      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/25 text-violet-300 text-xs font-medium mb-6">
+        <Sparkles size={11} />
+        AI-Powered Preparation
+      </div>
+      <h2 className="text-4xl font-black text-white leading-tight mb-4">{title}</h2>
+      <p className="text-slate-400 text-lg leading-relaxed mb-10">{subtitle}</p>
+
+      {/* Stats grid */}
+      <div className="grid grid-cols-2 gap-3">
+        {[
+          { value: '75K+', label: 'Active Learners', icon: '👥' },
+          { value: '12K+', label: 'Offers Cracked',  icon: '🎉' },
+          { value: '5K+',  label: 'Practice Problems', icon: '💻' },
+          { value: '4.9★', label: 'Average Rating',  icon: '⭐' },
+        ].map(s => (
+          <div key={s.label} className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4 backdrop-blur-sm">
+            <div className="text-xl mb-1">{s.icon}</div>
+            <div className="text-xl font-black text-white">{s.value}</div>
+            <div className="text-xs text-slate-400 mt-0.5">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Testimonial */}
+    <div className="relative bg-slate-800/40 border border-slate-700/40 rounded-2xl p-5 backdrop-blur-sm">
+      <div className="flex gap-0.5 mb-3">
+        {[...Array(5)].map((_, i) => <span key={i} className="text-yellow-400 text-sm">★</span>)}
+      </div>
+      <p className="text-slate-300 text-sm leading-relaxed mb-4">
+        "Avantika's AI mock interviews were eerily similar to my actual Google interview. Got the offer after just 6 weeks!"
+      </p>
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center text-white text-sm font-bold">RV</div>
+        <div>
+          <p className="text-sm font-semibold text-white">Riya Verma</p>
+          <p className="text-xs text-slate-500">SDE-2 @ Google</p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 // ============================================================
 // LOGIN
@@ -36,93 +97,99 @@ export const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 flex">
-      {/* Left — decorative */}
-      <div className="hidden lg:flex flex-1 items-center justify-center bg-gradient-to-br from-slate-900 via-blue-950/20 to-slate-900 border-r border-slate-800 relative overflow-hidden">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl" />
-        <div className="relative text-center px-12">
-          <img src={logo} alt="Avantika" className="w-20 h-20 object-contain mx-auto mb-6 rounded-xl" />
-          <h2 className="text-3xl font-black text-white mb-4">Welcome back!</h2>
-          <p className="text-slate-400 text-lg">Continue your interview preparation journey.</p>
-          <div className="mt-10 grid grid-cols-2 gap-4 text-center">
-            {[
-              { value: '75K+', label: 'Learners' },
-              { value: '12K+', label: 'Offers' },
-              { value: '5K+', label: 'Problems' },
-              { value: '4.9★', label: 'Rating' },
-            ].map((s) => (
-              <div key={s.label} className="bg-slate-800/50 rounded-xl p-4">
-                <div className="text-xl font-bold text-white">{s.value}</div>
-                <div className="text-xs text-slate-400">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <AuthPanel
+        title="Welcome back! Keep the momentum going."
+        subtitle="Your personalized AI coach is ready. Pick up right where you left off."
+      />
 
       {/* Right — form */}
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <Link to="/" className="inline-flex items-center gap-2 mb-6">
-              <img src={logo} alt="Avantika" className="w-8 h-8 object-contain rounded-md" />
-              <span className="font-bold text-white">Avantika</span>
+
+          {/* Mobile logo */}
+          <div className="flex justify-center mb-8 lg:hidden">
+            <Link to="/" className="flex items-center gap-2.5">
+              <img src={logo} alt="Avantika" className="w-9 h-9 object-contain rounded-xl" />
+              <span className="font-black text-white text-xl">Avantika</span>
             </Link>
-            <h1 className="text-2xl font-bold text-white">Sign in to your account</h1>
-            <p className="text-slate-400 mt-1">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-blue-400 hover:text-blue-300">Sign up free</Link>
+          </div>
+
+          <div className="mb-8">
+            <h1 className="text-3xl font-black text-white mb-2">Sign in</h1>
+            <p className="text-slate-400">
+              No account yet?{' '}
+              <Link to="/register" className="text-violet-400 hover:text-violet-300 font-medium transition-colors">
+                Create one free →
+              </Link>
             </p>
           </div>
 
-          <Card>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                label="Email address"
-                type="email"
-                placeholder="you@example.com"
-                icon={<Mail size={15} />}
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-              />
-              <Input
-                label="Password"
-                type={showPass ? 'text' : 'password'}
-                placeholder="••••••••"
-                icon={<Lock size={15} />}
-                iconRight={
-                  <button type="button" onClick={() => setShowPass(!showPass)}>
-                    {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
-                  </button>
-                }
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-              />
-
-              {error && (
-                <div className="flex items-center gap-2 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
-                  <AlertCircle size={14} className="shrink-0" />
-                  {error}
-                </div>
-              )}
-
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 text-slate-400 cursor-pointer">
-                  <input type="checkbox" className="rounded border-slate-600 bg-slate-800" />
-                  Remember me
-                </label>
-                <a href="#" className="text-blue-400 hover:text-blue-300">Forgot password?</a>
-              </div>
-
-              <Button type="submit" className="w-full" loading={loading} iconRight={<ArrowRight size={16} />}>
-                Sign in
-              </Button>
-            </form>
-
-            <p className="text-center text-xs text-slate-500 mt-4">
-              Don't have an account?{' '}
-              <Link to="/register" className="text-blue-400 hover:text-blue-300">Create one free</Link>
+          {/* Quick demo login hint */}
+          <div className="flex items-start gap-2.5 bg-violet-500/8 border border-violet-500/20 rounded-xl px-4 py-3 mb-6 text-sm">
+            <Sparkles size={14} className="text-violet-400 mt-0.5 shrink-0" />
+            <p className="text-slate-300">
+              <span className="font-semibold text-violet-300">Demo: </span>
+              use any email + password to explore the platform.
             </p>
-          </Card>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              label="Email address"
+              type="email"
+              placeholder="you@example.com"
+              icon={<Mail size={15} />}
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+            />
+            <Input
+              label="Password"
+              type={showPass ? 'text' : 'password'}
+              placeholder="••••••••"
+              icon={<Lock size={15} />}
+              iconRight={
+                <button type="button" onClick={() => setShowPass(!showPass)} className="text-slate-500 hover:text-slate-300 transition-colors">
+                  {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              }
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+            />
+
+            {error && (
+              <div className="flex items-center gap-2.5 text-sm text-red-400 bg-red-400/8 border border-red-400/20 rounded-xl px-4 py-3">
+                <AlertCircle size={14} className="shrink-0" />
+                {error}
+              </div>
+            )}
+
+            <div className="flex items-center justify-between text-sm pt-1">
+              <label className="flex items-center gap-2 text-slate-400 cursor-pointer hover:text-slate-300 transition-colors">
+                <input type="checkbox" className="w-4 h-4 rounded border-slate-600 bg-slate-800 accent-violet-500" />
+                Remember me
+              </label>
+              <a href="#" className="text-violet-400 hover:text-violet-300 font-medium transition-colors">Forgot password?</a>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 shadow-lg shadow-violet-600/25 transition-all duration-200 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+            >
+              {loading ? (
+                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              ) : (
+                <>Sign in <ArrowRight size={16} /></>
+              )}
+            </button>
+          </form>
+
+          <p className="text-center text-xs text-slate-600 mt-8">
+            Protected by enterprise-grade security · SOC 2 compliant
+          </p>
         </div>
       </div>
     </div>
@@ -169,68 +236,83 @@ export const Register: React.FC = () => {
   if (step === 2) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold">🎯</span>
+        <div className="w-full max-w-lg">
+          {/* Step indicator */}
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <div className="flex items-center gap-2 text-sm text-slate-400">
+              <div className="w-7 h-7 rounded-full bg-violet-500/20 border border-violet-500/40 flex items-center justify-center">
+                <CheckCircle2 size={14} className="text-violet-400" />
+              </div>
+              Account
             </div>
-            <h1 className="text-2xl font-bold text-white">Set your goals</h1>
-            <p className="text-slate-400 mt-1">Help us personalize your experience</p>
+            <div className="w-10 h-px bg-violet-500/30" />
+            <div className="flex items-center gap-2 text-sm font-medium text-violet-300">
+              <div className="w-7 h-7 rounded-full bg-violet-500 flex items-center justify-center text-white text-xs font-bold">2</div>
+              Your Goals
+            </div>
           </div>
 
-          <Card>
-            <form onSubmit={handleComplete} className="space-y-4">
+          <div className="text-center mb-8">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-violet-500/30">
+              <span className="text-2xl">🎯</span>
+            </div>
+            <h1 className="text-3xl font-black text-white mb-2">Set your goals</h1>
+            <p className="text-slate-400">Help us build your perfect learning path</p>
+          </div>
+
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+            <form onSubmit={handleComplete} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Experience Level</label>
-                <div className="grid grid-cols-2 gap-2">
+                <label className="block text-sm font-semibold text-slate-200 mb-3">Experience Level</label>
+                <div className="grid grid-cols-2 gap-2.5">
                   {[
-                    { value: 'fresher', label: '🎓 Fresher', desc: '0-1 year' },
-                    { value: 'mid', label: '💼 Mid-Level', desc: '2-5 years' },
-                    { value: 'senior', label: '🏆 Senior', desc: '6-10 years' },
-                    { value: 'staff', label: '⭐ Staff+', desc: '10+ years' },
-                  ].map((opt) => (
+                    { value: 'fresher', label: '🎓 Fresher', desc: '0–1 year' },
+                    { value: 'mid',     label: '💼 Mid-Level', desc: '2–5 years' },
+                    { value: 'senior',  label: '🏆 Senior',    desc: '6–10 years' },
+                    { value: 'staff',   label: '⭐ Staff+',    desc: '10+ years' },
+                  ].map(opt => (
                     <button
                       key={opt.value}
                       type="button"
                       onClick={() => setForm({ ...form, role: opt.value })}
-                      className={`p-3 rounded-xl border text-left transition-all ${
+                      className={`p-3.5 rounded-xl border text-left transition-all duration-200 ${
                         form.role === opt.value
-                          ? 'border-blue-500 bg-blue-500/10 text-blue-400'
-                          : 'border-slate-700 text-slate-400 hover:border-slate-600'
+                          ? 'border-violet-500/60 bg-violet-500/10 text-violet-300 shadow-sm shadow-violet-500/10'
+                          : 'border-slate-700/60 text-slate-400 hover:border-slate-600 hover:bg-slate-800/50'
                       }`}
                     >
-                      <div className="text-sm font-medium">{opt.label}</div>
-                      <div className="text-xs opacity-70">{opt.desc}</div>
+                      <div className="text-sm font-semibold mb-0.5">{opt.label}</div>
+                      <div className="text-xs opacity-60">{opt.desc}</div>
                     </button>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Target Role</label>
+                <label className="block text-sm font-semibold text-slate-200 mb-2">Target Role</label>
                 <select
-                  className="input-base"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500/60 transition-all"
                   value={form.targetRole}
-                  onChange={(e) => setForm({ ...form, targetRole: e.target.value })}
+                  onChange={e => setForm({ ...form, targetRole: e.target.value })}
                 >
-                  {['Senior Backend Engineer', 'Senior Frontend Engineer', 'Full Stack Engineer', 'ML/AI Engineer', 'Cloud Architect', 'DevOps Engineer', 'Data Engineer'].map((r) => (
+                  {['Senior Backend Engineer','Senior Frontend Engineer','Full Stack Engineer','ML/AI Engineer','Cloud Architect','DevOps Engineer','Data Engineer'].map(r => (
                     <option key={r} value={r} className="bg-slate-800">{r}</option>
                   ))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Target Company</label>
+                <label className="block text-sm font-semibold text-slate-200 mb-2.5">Target Company</label>
                 <div className="grid grid-cols-3 gap-2">
-                  {['Google', 'Amazon', 'Startup', 'Europe', 'Any'].map((co) => (
+                  {['Google','Amazon','Microsoft','Meta','Startup','Any'].map(co => (
                     <button
                       key={co}
                       type="button"
                       onClick={() => setForm({ ...form, targetCompany: co })}
-                      className={`py-2 px-3 rounded-lg border text-sm transition-all ${
+                      className={`py-2.5 px-3 rounded-xl border text-sm font-medium transition-all duration-200 ${
                         form.targetCompany === co
-                          ? 'border-blue-500 bg-blue-500/10 text-blue-400'
-                          : 'border-slate-700 text-slate-400 hover:border-slate-600'
+                          ? 'border-violet-500/60 bg-violet-500/10 text-violet-300'
+                          : 'border-slate-700/60 text-slate-400 hover:border-slate-600 hover:bg-slate-800/50'
                       }`}
                     >
                       {co}
@@ -240,58 +322,92 @@ export const Register: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Target Timeline</label>
+                <label className="block text-sm font-semibold text-slate-200 mb-2">Preparation Timeline</label>
                 <select
-                  className="input-base"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500/60 transition-all"
                   value={form.timeline}
-                  onChange={(e) => setForm({ ...form, timeline: e.target.value })}
+                  onChange={e => setForm({ ...form, timeline: e.target.value })}
                 >
-                  <option value="1month" className="bg-slate-800">1 month (intensive)</option>
-                  <option value="3months" className="bg-slate-800">3 months (balanced)</option>
-                  <option value="6months" className="bg-slate-800">6 months (comfortable)</option>
+                  <option value="1month" className="bg-slate-800">⚡ 1 month — intensive sprint</option>
+                  <option value="3months" className="bg-slate-800">⚖️ 3 months — balanced pace</option>
+                  <option value="6months" className="bg-slate-800">🌿 6 months — comfortable journey</option>
                 </select>
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
+                <div className="flex items-center gap-2.5 text-sm text-red-400 bg-red-400/8 border border-red-400/20 rounded-xl px-4 py-3">
                   <AlertCircle size={14} className="shrink-0" />
                   {error}
                 </div>
               )}
 
-              <Button type="submit" className="w-full" loading={loading} iconRight={<ArrowRight size={16} />}>
-                Start My Journey 🚀
-              </Button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 shadow-lg shadow-violet-600/25 transition-all duration-200 active:scale-[0.98] disabled:opacity-60"
+              >
+                {loading ? (
+                  <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                ) : (
+                  <>🚀 Start My Journey</>
+                )}
+              </button>
             </form>
-          </Card>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <img src={logo} alt="Avantika" className="w-8 h-8 object-contain rounded-md" />
-            <span className="font-bold text-white">Avantika</span>
-          </Link>
-          <h1 className="text-2xl font-bold text-white">Create your free account</h1>
-          <p className="text-slate-400 mt-1">
-            Already have one?{' '}
-            <Link to="/login" className="text-blue-400 hover:text-blue-300">Sign in</Link>
-          </p>
-        </div>
+    <div className="min-h-screen bg-slate-950 flex">
+      <AuthPanel
+        title="Join 75,000+ engineers cracking top tech interviews."
+        subtitle="AI-powered coaching, personalized learning paths, and real interview simulations."
+      />
 
-        <Card>
+      {/* Right — form */}
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
+        <div className="w-full max-w-md">
+
+          {/* Mobile logo */}
+          <div className="flex justify-center mb-8 lg:hidden">
+            <Link to="/" className="flex items-center gap-2.5">
+              <img src={logo} alt="Avantika" className="w-9 h-9 object-contain rounded-xl" />
+              <span className="font-black text-white text-xl">Avantika</span>
+            </Link>
+          </div>
+
+          <div className="mb-8">
+            <h1 className="text-3xl font-black text-white mb-2">Create your account</h1>
+            <p className="text-slate-400">
+              Already have one?{' '}
+              <Link to="/login" className="text-violet-400 hover:text-violet-300 font-medium transition-colors">
+                Sign in →
+              </Link>
+            </p>
+          </div>
+
+          {/* Perks */}
+          <div className="space-y-2 mb-7">
+            {['Free forever plan — no credit card needed', 'Personalized AI learning path in 30 seconds', 'Instant access to 5,000+ practice problems'].map(perk => (
+              <div key={perk} className="flex items-center gap-2.5 text-sm text-slate-300">
+                <CheckCircle2 size={14} className="text-violet-400 shrink-0" />
+                {perk}
+              </div>
+            ))}
+          </div>
+
           <form onSubmit={handleStep1} className="space-y-4">
             <Input
               label="Full Name"
               placeholder="Avantika Sharma"
               icon={<User size={15} />}
               value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              onChange={e => setForm({ ...form, name: e.target.value })}
             />
             <Input
               label="Email address"
@@ -299,33 +415,39 @@ export const Register: React.FC = () => {
               placeholder="you@example.com"
               icon={<Mail size={15} />}
               value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              onChange={e => setForm({ ...form, email: e.target.value })}
             />
             <Input
               label="Create password"
               type="password"
-              placeholder="Min 6 characters"
+              placeholder="At least 6 characters"
               icon={<Lock size={15} />}
               value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              onChange={e => setForm({ ...form, password: e.target.value })}
             />
 
             {error && (
-              <div className="flex items-center gap-2 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
+              <div className="flex items-center gap-2.5 text-sm text-red-400 bg-red-400/8 border border-red-400/20 rounded-xl px-4 py-3">
                 <AlertCircle size={14} className="shrink-0" />
                 {error}
               </div>
             )}
 
-            <Button type="submit" className="w-full" iconRight={<ArrowRight size={16} />}>
-              Continue →
-            </Button>
+            <button
+              type="submit"
+              className="w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-violet-600 to-violet-500 hover:from-violet-500 hover:to-violet-400 shadow-lg shadow-violet-600/25 transition-all duration-200 active:scale-[0.98] mt-2"
+            >
+              Continue <ArrowRight size={16} />
+            </button>
           </form>
 
-          <p className="text-center text-xs text-slate-500 mt-4">
-            By creating an account, you agree to our Terms of Service & Privacy Policy
+          <p className="text-center text-xs text-slate-600 mt-6">
+            By creating an account you agree to our{' '}
+            <a href="#" className="text-slate-500 hover:text-slate-400">Terms</a>
+            {' & '}
+            <a href="#" className="text-slate-500 hover:text-slate-400">Privacy Policy</a>
           </p>
-        </Card>
+        </div>
       </div>
     </div>
   );

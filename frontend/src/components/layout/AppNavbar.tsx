@@ -68,7 +68,7 @@ const AppNavbar: React.FC<AppNavbarProps> = ({ onMobileMenuToggle, mobileMenuOpe
         <button className="relative p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors">
           <Bell size={16} />
           {activeNotifications > 0 && (
-            <span className="absolute top-1 right-1 w-4 h-4 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center font-bold">
+            <span className="absolute top-1 right-1 w-4 h-4 bg-violet-500 rounded-full text-white text-xs flex items-center justify-center font-bold">
               {activeNotifications}
             </span>
           )}
@@ -77,10 +77,10 @@ const AppNavbar: React.FC<AppNavbarProps> = ({ onMobileMenuToggle, mobileMenuOpe
         {/* User avatar */}
         {user && (
           <div className="flex items-center gap-2 pl-1">
-            <Avatar initials={user.avatar} size="sm" />
+            <Avatar initials={user.avatar ?? '?'} size="sm" />
             <div className="hidden sm:block">
               <p className="text-xs font-medium text-white leading-tight">{user.name.split(' ')[0]}</p>
-              <Badge variant="blue" size="sm">{user.tier}</Badge>
+              <Badge variant="purple" size="sm">{user.tier}</Badge>
             </div>
           </div>
         )}
