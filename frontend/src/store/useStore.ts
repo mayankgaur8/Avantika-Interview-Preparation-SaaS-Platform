@@ -184,7 +184,7 @@ export const useStore = create<AppState>()(
         }),
     }),
     {
-      name: 'avantika-store',
+      name: 'avantika-store-v2', // v2: clears old mock-auth persisted state
       partialize: (s) => ({
         isAuthenticated: s.isAuthenticated,
         user: s.user,

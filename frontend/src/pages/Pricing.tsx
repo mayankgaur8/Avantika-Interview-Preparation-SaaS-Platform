@@ -61,16 +61,23 @@ const Pricing: React.FC = () => {
 
       // ── Paid plan — create Razorpay order ──────────────────────────────────
       setPayState('creating');
-      let orderData: { orderId: string; amount: number; currency: string; keyId: string };
+      let orderData: { orderId: string; amount: number; currency: string; keyId: string } | null = null;
       try {
         orderData = await paymentsApi.createOrder(plan.id);
       } catch (err) {
-        setErrorMessage((err as Error).message || 'Could not create order. Try again.');
+        setErrorMessage((err as Error).message || 'Could not create order. Is the backend running?');
+        setPayState('error');
+        return;
+      }
+
+      if (!orderData) {
+        setErrorMessage('Order creation returned empty response.');
         setPayState('error');
         return;
       }
 
       // ── Open Razorpay checkout ─────────────────────────────────────────────
+      // Dashboard is NOT accessible until this handler fires and verification succeeds.
       setPayState('checkout');
       try {
         await openCheckout({
@@ -90,6 +97,7 @@ const Pricing: React.FC = () => {
             appName: 'avantika',
           },
           theme: { color: '#7c3aed' },
+          // ── handler fires ONLY after Razorpay confirms payment success ────
           handler: async (response) => {
             setPayState('verifying');
             try {
@@ -99,29 +107,31 @@ const Pricing: React.FC = () => {
                 razorpay_signature: response.razorpay_signature,
                 planId: plan.id,
               });
+              // Only now grant access — subscription is set in store
               setSubscription(subscription);
-              setSuccessMessage(
-                `Payment successful! You're now on the ${plan.name} plan.`,
-              );
+              setSuccessMessage(`Payment verified! You're now on the ${plan.name} plan.`);
               setPayState('success');
+              // Redirect after showing confirmation
               setTimeout(() => navigate('/dashboard'), 2500);
             } catch (err) {
               setErrorMessage(
                 (err as Error).message ||
-                  'Payment recorded but verification failed. Contact support.',
+                  'Payment was captured but server verification failed. Contact support with your payment ID.',
               );
               setPayState('error');
             }
           },
           modal: {
+            // User closed the Razorpay modal — payment NOT completed
             ondismiss: () => {
               setPayState('idle');
               setActivePlanId(null);
+              setErrorMessage('');
             },
           },
         });
       } catch (err) {
-        setErrorMessage((err as Error).message || 'Could not open payment window.');
+        setErrorMessage((err as Error).message || 'Could not open Razorpay. Check your internet connection.');
         setPayState('error');
       }
     },

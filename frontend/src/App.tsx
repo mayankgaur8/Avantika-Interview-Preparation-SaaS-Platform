@@ -24,14 +24,25 @@ import Jobs from './pages/Jobs';
 
 // ─── Route guards ─────────────────────────────────────────────────────────────
 
+/**
+ * Requires: authenticated + has chosen at least one plan (subscription not null).
+ * Flow: Login → Select Plan (free or paid) → Dashboard
+ */
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useStore();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+  const { isAuthenticated, subscription } = useStore();
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!subscription) return <Navigate to="/pricing" replace />;
+  return <>{children}</>;
 }
 
+/**
+ * Blocks login/register pages for already-authenticated users.
+ * If they have a subscription → dashboard; otherwise → pricing (force plan selection).
+ */
 function AuthRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useStore();
-  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <>{children}</>;
+  const { isAuthenticated, subscription } = useStore();
+  if (!isAuthenticated) return <>{children}</>;
+  return <Navigate to={subscription ? '/dashboard' : '/pricing'} replace />;
 }
 
 // ─── Rehydrate user on first load ─────────────────────────────────────────────
