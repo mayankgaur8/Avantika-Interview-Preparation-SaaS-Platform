@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, User, Eye, EyeOff, ArrowRight, Github, Chrome } from 'lucide-react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { Mail, Lock, User, Eye, EyeOff, ArrowRight, AlertCircle } from 'lucide-react';
 import { Button, Input, Card } from '../components/ui';
 import { useStore } from '../store/useStore';
 import logo from '../assets/logo.png';
@@ -10,7 +10,10 @@ import logo from '../assets/logo.png';
 // ============================================================
 export const Login: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useStore();
+  const from = (location.state as { from?: string })?.from ?? '/dashboard';
+
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -22,18 +25,13 @@ export const Login: React.FC = () => {
     if (!form.email) { setError('Please enter your email'); return; }
     if (!form.password) { setError('Please enter your password'); return; }
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 800));
-    const success = login(form.email, form.password);
-    if (success) navigate('/dashboard');
-    else setError('Invalid credentials. Try any email/password!');
+    const result = await login(form.email, form.password);
+    if (result.success) {
+      navigate(from, { replace: true });
+    } else {
+      setError(result.error ?? 'Login failed. Check your credentials.');
+    }
     setLoading(false);
-  };
-
-  const handleOAuth = async (provider: string) => {
-    setLoading(true);
-    await new Promise((r) => setTimeout(r, 600));
-    login(`demo@${provider}.com`, 'demo');
-    navigate('/dashboard');
   };
 
   return (
@@ -70,26 +68,13 @@ export const Login: React.FC = () => {
               <span className="font-bold text-white">Avantika</span>
             </Link>
             <h1 className="text-2xl font-bold text-white">Sign in to your account</h1>
-            <p className="text-slate-400 mt-1">Don't have an account? <Link to="/register" className="text-blue-400 hover:text-blue-300">Sign up free</Link></p>
+            <p className="text-slate-400 mt-1">
+              Don't have an account?{' '}
+              <Link to="/register" className="text-blue-400 hover:text-blue-300">Sign up free</Link>
+            </p>
           </div>
 
           <Card>
-            {/* OAuth */}
-            <div className="grid grid-cols-2 gap-3 mb-6">
-              <Button variant="secondary" size="sm" icon={<Chrome size={15} />} onClick={() => handleOAuth('google')} loading={loading}>
-                Google
-              </Button>
-              <Button variant="secondary" size="sm" icon={<Github size={15} />} onClick={() => handleOAuth('github')} loading={loading}>
-                GitHub
-              </Button>
-            </div>
-
-            <div className="flex items-center gap-3 mb-6">
-              <hr className="flex-1 border-slate-700" />
-              <span className="text-xs text-slate-500">or continue with email</span>
-              <hr className="flex-1 border-slate-700" />
-            </div>
-
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input
                 label="Email address"
@@ -114,7 +99,8 @@ export const Login: React.FC = () => {
               />
 
               {error && (
-                <div className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
+                <div className="flex items-center gap-2 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
+                  <AlertCircle size={14} className="shrink-0" />
                   {error}
                 </div>
               )}
@@ -133,7 +119,8 @@ export const Login: React.FC = () => {
             </form>
 
             <p className="text-center text-xs text-slate-500 mt-4">
-              💡 Tip: Any email + password works for demo
+              Don't have an account?{' '}
+              <Link to="/register" className="text-blue-400 hover:text-blue-300">Create one free</Link>
             </p>
           </Card>
         </div>
@@ -147,25 +134,36 @@ export const Login: React.FC = () => {
 // ============================================================
 export const Register: React.FC = () => {
   const navigate = useNavigate();
-  const { login } = useStore();
+  const { register } = useStore();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     name: '', email: '', password: '',
     role: 'mid', targetRole: 'Senior Backend Engineer', targetCompany: 'Google', timeline: '3months',
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleStep1 = (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name && form.email && form.password) setStep(2);
+    setError('');
+    if (!form.name.trim()) { setError('Name is required'); return; }
+    if (!form.email.trim()) { setError('Email is required'); return; }
+    if (form.password.length < 6) { setError('Password must be at least 6 characters'); return; }
+    setStep(2);
   };
 
   const handleComplete = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1000));
-    login(form.email, form.password);
-    navigate('/dashboard');
+    const result = await register(form.name, form.email, form.password);
+    if (result.success) {
+      navigate('/dashboard');
+    } else {
+      setError(result.error ?? 'Registration failed. Please try again.');
+      setStep(1);
+    }
+    setLoading(false);
   };
 
   if (step === 2) {
@@ -222,7 +220,7 @@ export const Register: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Target Company Type</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Target Company</label>
                 <div className="grid grid-cols-3 gap-2">
                   {['Google', 'Amazon', 'Startup', 'Europe', 'Any'].map((co) => (
                     <button
@@ -254,6 +252,13 @@ export const Register: React.FC = () => {
                 </select>
               </div>
 
+              {error && (
+                <div className="flex items-center gap-2 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
+                  <AlertCircle size={14} className="shrink-0" />
+                  {error}
+                </div>
+              )}
+
               <Button type="submit" className="w-full" loading={loading} iconRight={<ArrowRight size={16} />}>
                 Start My Journey 🚀
               </Button>
@@ -273,7 +278,10 @@ export const Register: React.FC = () => {
             <span className="font-bold text-white">Avantika</span>
           </Link>
           <h1 className="text-2xl font-bold text-white">Create your free account</h1>
-          <p className="text-slate-400 mt-1">Already have one? <Link to="/login" className="text-blue-400 hover:text-blue-300">Sign in</Link></p>
+          <p className="text-slate-400 mt-1">
+            Already have one?{' '}
+            <Link to="/login" className="text-blue-400 hover:text-blue-300">Sign in</Link>
+          </p>
         </div>
 
         <Card>
@@ -296,11 +304,18 @@ export const Register: React.FC = () => {
             <Input
               label="Create password"
               type="password"
-              placeholder="Min 8 characters"
+              placeholder="Min 6 characters"
               icon={<Lock size={15} />}
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             />
+
+            {error && (
+              <div className="flex items-center gap-2 text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
+                <AlertCircle size={14} className="shrink-0" />
+                {error}
+              </div>
+            )}
 
             <Button type="submit" className="w-full" iconRight={<ArrowRight size={16} />}>
               Continue →

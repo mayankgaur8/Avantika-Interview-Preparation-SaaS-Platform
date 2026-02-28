@@ -1,11 +1,18 @@
 # Dependencies
 node_modules/
 frontend/node_modules/
+backend/node_modules/
+billing/node_modules/
 
 # Build output
 dist/
 frontend/dist/
+backend/dist/
+billing/dist/
 build/
+
+# SQLite database
+backend/data/
 
 # Environment files
 .env

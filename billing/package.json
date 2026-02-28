@@ -1,0 +1,13 @@
+{
+  "name": "@avantika/billing",
+  "version": "1.0.0",
+  "description": "Reusable billing module — Razorpay + subscriptions. Plug into any app.",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

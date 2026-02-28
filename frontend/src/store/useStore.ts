@@ -1,14 +1,16 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { currentUser } from '../data/mockData';
+import { authApi, setToken, clearToken, SubscriptionDTO } from '../services/api';
+import type { PlanLevel } from '../hooks/useSubscription';
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 interface User {
   id: string;
   name: string;
   email: string;
-  username: string;
-  avatar: string;
-  tier: 'free' | 'pro' | 'enterprise';
+  avatar?: string;
+  tier: PlanLevel;
   streak: number;
   xp: number;
   level: number;
@@ -19,6 +21,7 @@ interface AppState {
   // Auth
   isAuthenticated: boolean;
   user: User | null;
+  subscription: SubscriptionDTO | null;
 
   // UI
   sidebarCollapsed: boolean;
@@ -26,111 +29,171 @@ interface AppState {
   activeNotifications: number;
 
   // Practice
-  solvedProblems: Set<string>;
-  bookmarkedProblems: Set<string>;
-
-  // Learning
+  solvedProblems: string[];
+  bookmarkedProblems: string[];
   enrolledPaths: string[];
 
-  // Actions
-  login: (email: string, password: string) => boolean;
+  // Actions — Auth
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  register: (name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
+  setSubscription: (sub: SubscriptionDTO | null) => void;
+  refreshUser: () => Promise<void>;
+
+  // Actions — UI
   toggleSidebar: () => void;
   toggleTheme: () => void;
+
+  // Actions — Practice
   markProblemSolved: (id: string) => void;
   toggleBookmark: (id: string) => void;
   enrollPath: (pathId: string) => void;
   updateXP: (amount: number) => void;
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+
+function makeUser(raw: { id: string; name: string; email: string }, sub: SubscriptionDTO | null): User {
+  return {
+    id: raw.id,
+    name: raw.name,
+    email: raw.email,
+    avatar: raw.name.slice(0, 2).toUpperCase(),
+    tier: sub?.planLevel ?? 'free',
+    streak: 0,
+    xp: 0,
+    level: 1,
+    interviewReadiness: 45,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 export const useStore = create<AppState>()(
   persist(
     (set, get) => ({
       isAuthenticated: false,
       user: null,
+      subscription: null,
       sidebarCollapsed: false,
       theme: 'dark',
-      activeNotifications: 3,
-      solvedProblems: new Set(['p1', 'p6']),
-      bookmarkedProblems: new Set(['p3', 'p5']),
-      enrolledPaths: ['lp1', 'lp2'],
+      activeNotifications: 0,
+      solvedProblems: [],
+      bookmarkedProblems: [],
+      enrolledPaths: [],
 
-      login: (email: string, _password: string) => {
-        // Mock auth — any email/password works
-        if (email) {
+      // ── Auth ───────────────────────────────────────────────────────────────
+
+      login: async (email, password) => {
+        try {
+          const res = await authApi.login(email, password);
+          setToken(res.token);
           set({
             isAuthenticated: true,
-            user: {
-              ...currentUser,
-              tier: 'pro',
-            },
+            user: makeUser(res.user, res.subscription),
+            subscription: res.subscription,
           });
-          return true;
+          return { success: true };
+        } catch (err) {
+          return { success: false, error: (err as Error).message };
         }
-        return false;
+      },
+
+      register: async (name, email, password) => {
+        try {
+          const res = await authApi.register(name, email, password);
+          setToken(res.token);
+          set({
+            isAuthenticated: true,
+            user: makeUser(res.user, res.subscription),
+            subscription: res.subscription,
+          });
+          return { success: true };
+        } catch (err) {
+          return { success: false, error: (err as Error).message };
+        }
       },
 
       logout: () => {
-        set({ isAuthenticated: false, user: null });
+        clearToken();
+        set({ isAuthenticated: false, user: null, subscription: null });
       },
 
-      toggleSidebar: () => {
-        set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed }));
+      setSubscription: (sub) => {
+        set((state) => ({
+          subscription: sub,
+          user: state.user
+            ? { ...state.user, tier: sub?.planLevel ?? 'free' }
+            : null,
+        }));
       },
 
-      toggleTheme: () => {
-        set((state) => {
-          const newTheme = state.theme === 'dark' ? 'light' : 'dark';
-          document.documentElement.classList.toggle('dark', newTheme === 'dark');
-          return { theme: newTheme };
-        });
+      refreshUser: async () => {
+        try {
+          const { user, subscription } = await authApi.me();
+          set({
+            user: makeUser(user, subscription),
+            subscription,
+            isAuthenticated: true,
+          });
+        } catch {
+          // Token expired / invalid — log out silently
+          clearToken();
+          set({ isAuthenticated: false, user: null, subscription: null });
+        }
       },
 
-      markProblemSolved: (id: string) => {
-        set((state) => {
-          const solved = new Set(state.solvedProblems);
-          solved.add(id);
-          return { solvedProblems: solved };
+      // ── UI ─────────────────────────────────────────────────────────────────
+
+      toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+
+      toggleTheme: () =>
+        set((s) => {
+          const next = s.theme === 'dark' ? 'light' : 'dark';
+          document.documentElement.classList.toggle('dark', next === 'dark');
+          return { theme: next };
+        }),
+
+      // ── Practice ───────────────────────────────────────────────────────────
+
+      markProblemSolved: (id) => {
+        set((s) => {
+          if (s.solvedProblems.includes(id)) return s;
+          return { solvedProblems: [...s.solvedProblems, id] };
         });
         get().updateXP(50);
       },
 
-      toggleBookmark: (id: string) => {
-        set((state) => {
-          const bookmarks = new Set(state.bookmarkedProblems);
-          if (bookmarks.has(id)) bookmarks.delete(id);
-          else bookmarks.add(id);
-          return { bookmarkedProblems: bookmarks };
-        });
-      },
+      toggleBookmark: (id) =>
+        set((s) => ({
+          bookmarkedProblems: s.bookmarkedProblems.includes(id)
+            ? s.bookmarkedProblems.filter((b) => b !== id)
+            : [...s.bookmarkedProblems, id],
+        })),
 
-      enrollPath: (pathId: string) => {
-        set((state) => ({
-          enrolledPaths: state.enrolledPaths.includes(pathId)
-            ? state.enrolledPaths
-            : [...state.enrolledPaths, pathId],
-        }));
-      },
+      enrollPath: (pathId) =>
+        set((s) => ({
+          enrolledPaths: s.enrolledPaths.includes(pathId) ? s.enrolledPaths : [...s.enrolledPaths, pathId],
+        })),
 
-      updateXP: (amount: number) => {
-        set((state) => {
-          if (!state.user) return state;
-          const newXP = state.user.xp + amount;
-          const newLevel = Math.floor(newXP / 500) + 1;
-          return {
-            user: { ...state.user, xp: newXP, level: newLevel },
-          };
-        });
-      },
+      updateXP: (amount) =>
+        set((s) => {
+          if (!s.user) return s;
+          const newXP = s.user.xp + amount;
+          return { user: { ...s.user, xp: newXP, level: Math.floor(newXP / 500) + 1 } };
+        }),
     }),
     {
       name: 'avantika-store',
-      partialize: (state) => ({
-        isAuthenticated: state.isAuthenticated,
-        user: state.user,
-        theme: state.theme,
-        enrolledPaths: state.enrolledPaths,
+      partialize: (s) => ({
+        isAuthenticated: s.isAuthenticated,
+        user: s.user,
+        subscription: s.subscription,
+        theme: s.theme,
+        enrolledPaths: s.enrolledPaths,
+        solvedProblems: s.solvedProblems,
+        bookmarkedProblems: s.bookmarkedProblems,
       }),
-    }
-  )
+    },
+  ),
 );
