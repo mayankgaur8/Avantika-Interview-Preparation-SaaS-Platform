@@ -62,15 +62,15 @@ const TESTIMONIALS = [
 const PLANS = [
   {
     name: 'Free', price: '₹0', period: '', cta: 'Get Started Free', link: '/register', highlight: false, badge: null,
-    features: ['5 daily challenges', '50 MCQ questions', 'Basic learning paths', 'Community access', '1 mock interview / month'],
+    features: ['5 daily challenges', '50 MCQ questions / month', 'Basic learning paths', 'Community access', '1 mock interview / month'],
   },
   {
     name: 'Pro', price: '₹999', period: '/month', cta: 'Upgrade to Pro', link: '/pricing', highlight: true, badge: 'Most Popular',
-    features: ['Unlimited MCQ + Coding', 'AI Interview Coach (unlimited)', 'Resume analyzer', 'System design lab', 'Analytics & reports', 'Certifications'],
+    features: ['Unlimited MCQ + Coding', 'AI Interview Coach (unlimited)', 'Resume analyzer & ATS scoring', 'System Design Lab', 'Analytics & progress reports', 'Certifications'],
   },
   {
-    name: 'Enterprise', price: 'Custom', period: '', cta: 'Contact Sales', link: '/pricing', highlight: false, badge: 'Teams',
-    features: ['Everything in Pro', 'Team management (20 seats)', 'Custom learning paths', 'Dedicated account manager', 'White-label options', 'Priority 24/7 support'],
+    name: 'Enterprise', price: '₹2,999', period: '/month', cta: 'Upgrade to Enterprise', link: '/pricing', highlight: false, badge: 'Teams',
+    features: ['Everything in Free & Pro', 'Team management (up to 20 seats)', 'Custom learning paths', 'Dedicated account manager', 'White-label options', 'Priority 24/7 support', 'Bulk seat discounts'],
   },
 ];
 
