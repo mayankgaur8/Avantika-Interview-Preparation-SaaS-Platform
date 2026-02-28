@@ -77,7 +77,6 @@ const Pricing: React.FC = () => {
       }
 
       // ── Open Razorpay checkout ─────────────────────────────────────────────
-      // Dashboard is NOT accessible until this handler fires and verification succeeds.
       setPayState('checkout');
       try {
         await openCheckout({
@@ -97,42 +96,36 @@ const Pricing: React.FC = () => {
             appName: 'avantika',
           },
           theme: { color: '#7c3aed' },
-          // ── handler fires ONLY after Razorpay confirms payment success ────
           handler: async (response) => {
             setPayState('verifying');
-            try {
-              const { subscription } = await paymentsApi.verify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                planId: plan.id,
-              });
-              // Only now grant access — subscription is set in store
-              setSubscription(subscription);
-              setSuccessMessage(`Payment verified! You're now on the ${plan.name} plan.`);
-              setPayState('success');
-              // Redirect after showing confirmation
-              setTimeout(() => navigate('/dashboard'), 2500);
-            } catch (err) {
-              setErrorMessage(
-                (err as Error).message ||
-                  'Payment was captured but server verification failed. Contact support with your payment ID.',
-              );
-              setPayState('error');
-            }
+            const { subscription } = await paymentsApi.verify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              planId: plan.id,
+            });
+            setSubscription(subscription);
+            setSuccessMessage(`Payment verified! You're now on the ${plan.name} plan.`);
+            setPayState('success');
+            setTimeout(() => navigate('/dashboard'), 2500);
           },
           modal: {
-            // User closed the Razorpay modal — payment NOT completed
             ondismiss: () => {
               setPayState('idle');
               setActivePlanId(null);
-              setErrorMessage('');
             },
           },
         });
       } catch (err) {
-        setErrorMessage((err as Error).message || 'Could not open Razorpay. Check your internet connection.');
-        setPayState('error');
+        const msg = (err as Error).message;
+        // 'DISMISSED' is not an error — user just closed the modal
+        if (msg === 'DISMISSED') {
+          setPayState('idle');
+          setActivePlanId(null);
+        } else {
+          setErrorMessage(msg || 'Could not open Razorpay. Check your internet connection.');
+          setPayState('error');
+        }
       }
     },
     [isAuthenticated, user, navigate, openCheckout, setSubscription],
@@ -167,7 +160,7 @@ const Pricing: React.FC = () => {
             </Link>
             <Link
               to="/register"
-              className="text-sm px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium transition-colors"
+              className="text-sm px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-medium transition-colors"
             >
               Get started
             </Link>
