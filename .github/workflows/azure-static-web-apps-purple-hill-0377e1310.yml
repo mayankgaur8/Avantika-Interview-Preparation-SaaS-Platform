@@ -23,19 +23,21 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: frontend/package-lock.json
 
-      # Install from root so workspace hoisting + optional rollup native bindings work correctly
+      # Install in frontend workspace only so vite/rollup resolve from the same node_modules tree.
       - name: Install deps
-        run: npm ci --include=optional
+        working-directory: frontend
+        run: |
+          rm -rf node_modules
+          npm ci --include=optional
 
       - name: Ensure Rollup Linux native package
         working-directory: frontend
         run: |
-          if [ ! -d node_modules/@rollup/rollup-linux-x64-gnu ]; then
-            ROLLUP_VERSION=$(node -p "require('./package-lock.json').packages['node_modules/rollup'].version")
-            npm i --no-save @rollup/rollup-linux-x64-gnu@$ROLLUP_VERSION
-          fi
+          ROLLUP_VERSION=$(node -p "require('./node_modules/rollup/package.json').version")
+          npm i --no-save @rollup/rollup-linux-x64-gnu@$ROLLUP_VERSION
+          node -e "require.resolve('@rollup/rollup-linux-x64-gnu')"
 
       - name: Build (Vite)
         working-directory: frontend
