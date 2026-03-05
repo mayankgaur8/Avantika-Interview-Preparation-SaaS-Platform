@@ -1,6 +1,6 @@
 import Razorpay from 'razorpay';
 import { env } from '../config/env';
-import { verifyPaymentSignature, verifyWebhookSignature } from '../../billing/src/verify';
+import { verifyPaymentSignature, verifyWebhookSignature } from '../../../billing/src/verify';
 
 export const razorpay = new Razorpay({
   key_id: env.RAZORPAY_KEY_ID,

@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { getDb } from '../config/database';
-import { Subscription, planNameToLevel } from '../../billing/src/types';
+import { Subscription, planNameToLevel } from '../../../billing/src/types';
 
 interface DbSubscription {
   id: string;
@@ -66,15 +66,17 @@ export function activateSubscription(
 }
 
 /** Returns the user's active subscription or null. */
-export function getActiveSubscription(userId: string): (DbSubscription & { plan_level: string }) | null {
+export function getActiveSubscription(
+  userId: string,
+): (DbSubscription & { plan_level: string; amount: number }) | null {
   const db = getDb();
   const row = db
     .prepare(
-      `SELECT s.*, p.name as plan_name, p.level as plan_level
+      `SELECT s.*, p.name as plan_name, p.level as plan_level, p.amount as amount
        FROM subscriptions s JOIN plans p ON s.plan_id = p.id
        WHERE s.user_id = ? AND s.status = 'active' AND s.expires_at > ?`,
     )
-    .get(userId, Date.now()) as (DbSubscription & { plan_level: string }) | undefined;
+    .get(userId, Date.now()) as (DbSubscription & { plan_level: string; amount: number }) | undefined;
   return row ?? null;
 }
 

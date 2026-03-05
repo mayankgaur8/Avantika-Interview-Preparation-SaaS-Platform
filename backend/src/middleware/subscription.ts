@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 import { AuthRequest } from './auth';
 import { getActiveSubscription } from '../services/subscription';
-import { PLAN_HIERARCHY, PlanLevel } from '../../billing/src/types';
+import { PLAN_HIERARCHY, PlanLevel } from '../../../billing/src/types';
 
 /**
  * Middleware that checks the user has an active subscription at or above `minLevel`.

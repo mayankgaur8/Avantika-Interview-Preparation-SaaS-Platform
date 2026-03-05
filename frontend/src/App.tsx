@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useStore } from './store/useStore';
 import PageLayout from './components/layout/PageLayout';
 
@@ -93,11 +93,12 @@ function AppRoutes() {
 }
 
 function App() {
+  const Router = import.meta.env.DEV ? BrowserRouter : HashRouter;
   return (
-    <HashRouter>
+    <Router>
       <AppInit />
       <AppRoutes />
-    </HashRouter>
+    </Router>
   );
 }
 
