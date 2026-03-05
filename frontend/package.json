@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/ensure-rollup-linux.cjs",
-    "build": "tsc && vite build",
+    "build": "node scripts/ensure-rollup-linux.cjs && tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
