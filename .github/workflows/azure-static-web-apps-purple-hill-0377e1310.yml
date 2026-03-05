@@ -17,7 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Use stable Node (important for Vite/Rollup native deps)
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -25,19 +24,12 @@ jobs:
           cache: "npm"
           cache-dependency-path: frontend/package-lock.json
 
-      # Install in frontend workspace only so vite/rollup resolve from the same node_modules tree.
+      # npm install (not ci) is required: npm ci has a known bug where it skips
+      # OS-filtered optional packages (e.g. @rollup/rollup-linux-x64-gnu) on Linux
+      # when the lockfile was generated on macOS. npm install resolves them correctly.
       - name: Install deps
         working-directory: frontend
-        run: |
-          rm -rf node_modules
-          npm ci --include=optional
-
-      - name: Ensure Rollup Linux native package
-        working-directory: frontend
-        run: |
-          ROLLUP_VERSION=$(node -p "require('./node_modules/rollup/package.json').version")
-          npm i --no-save @rollup/rollup-linux-x64-gnu@$ROLLUP_VERSION
-          node -e "require.resolve('@rollup/rollup-linux-x64-gnu')"
+        run: npm install
 
       - name: Build (Vite)
         working-directory: frontend
