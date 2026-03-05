@@ -31,6 +31,13 @@ jobs:
         working-directory: frontend
         run: npm install
 
+      - name: Ensure Rollup Linux binary
+        working-directory: frontend
+        run: |
+          ROLLUP_VERSION=$(node -p "require('./node_modules/rollup/package.json').version")
+          npm install --no-save @rollup/rollup-linux-x64-gnu@$ROLLUP_VERSION
+          node -e "require.resolve('@rollup/rollup-linux-x64-gnu')"
+
       - name: Build (Vite)
         working-directory: frontend
         run: npm run build
