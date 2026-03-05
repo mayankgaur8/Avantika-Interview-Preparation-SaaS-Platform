@@ -25,13 +25,12 @@ jobs:
           cache: "npm"
           cache-dependency-path: frontend/package-lock.json
 
-      # Clean any old/bad installs (fixes rollup optional dependency issue)
-      - name: Clean install deps
+      # Deterministic install from lockfile; include optional native packages (rollup)
+      - name: Install deps
         working-directory: frontend
         run: |
           rm -rf node_modules
-          rm -f package-lock.json
-          npm install
+          npm ci --include=optional
 
       - name: Build (Vite)
         working-directory: frontend
