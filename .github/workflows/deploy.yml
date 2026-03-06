@@ -34,6 +34,7 @@ jobs:
         run: npm run build
         working-directory: frontend
         env:
+          VITE_BASE_PATH: /Avantika-Interview-Preparation-SaaS-Platform/
           VITE_RAZORPAY_KEY_ID: ${{ secrets.VITE_RAZORPAY_KEY_ID }}
 
       - name: Setup Pages
